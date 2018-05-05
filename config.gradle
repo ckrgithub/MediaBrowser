@@ -1,0 +1,17 @@
+//全局参数
+ext {
+    appConfig = [
+            versionCode  : 100,
+            versionName  : "1.0.0",
+            applicationId: "com.ckr.mediabrowser",
+    ]
+
+    androidConfig = [
+            compileSdkVersion: 27,
+            minSdkVersion    : 15,
+            targetSdkVersion : 27,
+    ]
+
+    supportVersion = "27.1.1"
+    supportV7 = 'com.android.support:appcompat-v7:27.1.1'
+}
