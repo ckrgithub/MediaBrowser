@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">MediaBrowser</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="tab_title">
+        <item>图片</item>
+        <item>音频</item>
+        <item>视频</item>
+        <item>文件</item>
+    </string-array>
 </resources>
