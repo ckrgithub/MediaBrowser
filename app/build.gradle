@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion rootProject.ext.androidConfig.compileSdkVersion
+    compileSdkVersion rootProject.androidConfig.compileSdkVersion
     defaultConfig {
-        applicationId rootProject.ext.appConfig.applicationId
-        minSdkVersion rootProject.ext.androidConfig.minSdkVersion
-        targetSdkVersion rootProject.ext.androidConfig.targetSdkVersion
-        versionCode rootProject.ext.appConfig.versionCode
-        versionName rootProject.ext.appConfig.versionName
+        applicationId rootProject.appConfig.applicationId
+        minSdkVersion rootProject.androidConfig.minSdkVersion
+        targetSdkVersion rootProject.androidConfig.targetSdkVersion
+        versionCode rootProject.appConfig.versionCode
+        versionName rootProject.appConfig.versionName
     }
     buildTypes {
         release {
@@ -19,5 +19,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation rootProject.ext.supportV7
+    implementation rootProject.supportV7
+    implementation "com.android.support:recyclerview-v7:$rootProject.supportVersion"
+    implementation "com.android.support:design:$rootProject.supportVersion"
 }
