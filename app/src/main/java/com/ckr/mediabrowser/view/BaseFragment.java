@@ -46,9 +46,9 @@ public abstract class BaseFragment extends Fragment {
 
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {
-		Logd(TAG, "setUserVisibleHint: isVisibleToUser:" + isVisibleToUser);
+		Logd(TAG, "setUserVisibleHint: isVisibleToUser:" + isVisibleToUser + ",this:" + this);
 		super.setUserVisibleHint(isVisibleToUser);
-		Logd(TAG, "setUserVisibleHint: ---->" + isVisibleToUser);
+		Logd(TAG, "setUserVisibleHint: ---->" + isVisibleToUser + ",this:" + this);
 		if (isVisibleToUser) {
 			onVisible();
 		} else {
