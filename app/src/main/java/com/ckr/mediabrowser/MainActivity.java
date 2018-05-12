@@ -5,11 +5,8 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
-import com.ckr.mediabrowser.view.AudioFragment;
+import com.ckr.mediabrowser.util.MediaLog;
 import com.ckr.mediabrowser.view.BaseFragment;
-import com.ckr.mediabrowser.view.FileFragment;
-import com.ckr.mediabrowser.view.PhotoFragment;
-import com.ckr.mediabrowser.view.VideoFragment;
 import com.ckr.mediabrowser.widget.MyFragmentPagerAdapter;
 
 import butterknife.BindArray;
@@ -33,21 +30,13 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		unbinder = ButterKnife.bind(this);
-		initFragment();
 		initTabLayout();
-	}
-
-	private void initFragment() {
-		fragments = new BaseFragment[tabTitles.length];
-		fragments[0] = PhotoFragment.newInstance();
-		fragments[1] = AudioFragment.newInstance();
-		fragments[2] = VideoFragment.newInstance();
-		fragments[3] = FileFragment.newInstance();
+		MediaLog.debug();
 	}
 
 	private void initTabLayout() {
 		tabLayout.addTab(tabLayout.newTab().setText(tabTitles[0]), true);
-		viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragments, tabTitles));
+		viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragments = new BaseFragment[tabTitles.length], tabTitles));
 		tabLayout.setupWithViewPager(viewPager);
 		viewPager.addOnPageChangeListener(this);
 	}
