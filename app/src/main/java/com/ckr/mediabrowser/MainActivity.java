@@ -15,7 +15,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static com.ckr.mediabrowser.util.MediaLog.Logd;
+
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+	private static final String TAG = "MainActivity";
 
 	@BindView(R.id.myViewPager)
 	ViewPager viewPager;
@@ -33,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 		unbinder = ButterKnife.bind(this);
 		initTabLayout();
 		MediaLog.debug();
+		Logd(TAG, "onCreate: ");
 	}
 
 	private void initTabLayout() {
@@ -43,6 +47,12 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 	}
 
 	@Override
+	protected void onResume() {
+		super.onResume();
+		Logd(TAG, "onResume: ");
+	}
+
+	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		unbinder.unbind();
@@ -50,12 +60,12 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
 	@Override
 	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+		Logd(TAG, "onPageScrolled: position:"+position);
 	}
 
 	@Override
 	public void onPageSelected(int position) {
-
+		Logd(TAG, "onPageSelected: position:"+position);
 	}
 
 	@Override
