@@ -1,6 +1,8 @@
 package com.ckr.mediabrowser.view;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -22,16 +24,39 @@ public abstract class BaseFragment extends Fragment {
 	private View view;
 	private Unbinder unbinder;
 
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		Logd(TAG, "onAttach: " + this);
+	}
+
+	@Override
+	public void onCreate(@Nullable Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		Logd(TAG, "onCreate: " + this);
+	}
 
 	@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		view = inflater.inflate(getLayoutId(), container, false);
-		Log.d(TAG, "onCreateView: " + savedInstanceState);
+		Logd(TAG, "onCreateView: " + savedInstanceState);
 		unbinder = ButterKnife.bind(this, view);
 		init();
 		return view;
+	}
+
+	@Override
+	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		Log.d(TAG, "onViewCreated: " + this);
+	}
+
+	@Override
+	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+		Log.d(TAG, "onActivityCreated: " + this);
 	}
 
 	@Override
@@ -48,7 +73,6 @@ public abstract class BaseFragment extends Fragment {
 	public void setUserVisibleHint(boolean isVisibleToUser) {
 		Logd(TAG, "setUserVisibleHint: isVisibleToUser:" + isVisibleToUser + ",this:" + this);
 		super.setUserVisibleHint(isVisibleToUser);
-		Logd(TAG, "setUserVisibleHint: ---->" + isVisibleToUser + ",this:" + this);
 		if (isVisibleToUser) {
 			onVisible();
 		} else {
