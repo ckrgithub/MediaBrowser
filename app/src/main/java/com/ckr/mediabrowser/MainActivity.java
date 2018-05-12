@@ -16,7 +16,7 @@ import butterknife.Unbinder;
 
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
 
-	@BindView(R.id.viewPager)
+	@BindView(R.id.myViewPager)
 	ViewPager viewPager;
 	@BindView(R.id.tabLayout)
 	TabLayout tabLayout;
