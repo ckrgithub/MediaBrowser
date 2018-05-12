@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 
 import com.ckr.mediabrowser.R;
+import com.ckr.mediabrowser.util.PermissionRequest;
 import com.ckr.mediabrowser.view.BaseFragment;
 import com.ckr.mediabrowser.widget.MyFragmentPagerAdapter;
 import com.ckr.mediabrowser.widget.MyViewPager;
@@ -50,6 +51,11 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	protected void init() {
 		Logd(TAG, "init: ");
 		initTabLayout();
+		if (isVisible) {
+			if (PermissionRequest.requestPermission(this, PermissionRequest.PERMISSION_STORAGE, PermissionRequest.REQUEST_STORAGE)) {
+				onPermissionGranted();
+			}
+		}
 	}
 
 	private void initTabLayout() {
@@ -57,6 +63,11 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 		viewPager.setAdapter(new MyFragmentPagerAdapter(getChildFragmentManager(), fragments = new BaseFragment[tabTitles.length], tabTitles, PhotoCreator.values()));
 		tabLayout.setupWithViewPager(viewPager);
 		viewPager.addOnPageChangeListener(this);
+	}
+
+	@Override
+	public void onPermissionGranted() {
+		Logd(TAG, "onPermissionGranted: ");
 	}
 
 	@Override

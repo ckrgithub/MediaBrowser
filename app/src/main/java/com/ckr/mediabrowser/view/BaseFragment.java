@@ -1,15 +1,25 @@
 package com.ckr.mediabrowser.view;
 
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.ckr.mediabrowser.R;
+import com.ckr.mediabrowser.util.PermissionRequest;
+import com.ckr.mediabrowser.util.ToastUtils;
+
+import butterknife.BindString;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
@@ -19,10 +29,17 @@ import static com.ckr.mediabrowser.util.MediaLog.Logd;
  * Created by PC大佬 on 2018/5/6.
  */
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements PermissionRequest.PermissionListener,DialogInterface.OnClickListener {
 	private static final String TAG = "BaseFragment";
+	private static final int REQUEST_SETTING_CODE = 2018;
+
 	private View view;
 	private Unbinder unbinder;
+	private AlertDialog dialog;
+	@BindString(R.string.tips)
+	String tips;
+	@BindString(R.string.message)
+	String message;
 
 	@Override
 	public void onAttach(Context context) {
@@ -50,13 +67,13 @@ public abstract class BaseFragment extends Fragment {
 	@Override
 	public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		Log.d(TAG, "onViewCreated: " + this);
+		Logd(TAG, "onViewCreated: " + this);
 	}
 
 	@Override
 	public void onActivityCreated(@Nullable Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		Log.d(TAG, "onActivityCreated: " + this);
+		Logd(TAG, "onActivityCreated: " + this);
 	}
 
 	@Override
@@ -68,6 +85,66 @@ public abstract class BaseFragment extends Fragment {
 	protected abstract int getLayoutId();
 
 	protected abstract void init();
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		Logd(TAG, "onActivityResult: requestCode:" + requestCode + ",resultCode:" + resultCode);
+		if (requestCode == REQUEST_SETTING_CODE) {
+			if (PermissionRequest.requestPermission(this, PermissionRequest.PERMISSION_STORAGE, PermissionRequest.REQUEST_STORAGE)) {
+				onPermissionGranted();
+			} else {
+				ToastUtils.toast(message);
+			}
+		}
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		switch (requestCode) {
+			case PermissionRequest.REQUEST_STORAGE:
+				if (PermissionRequest.isPermissionGranted(this, permissions, grantResults)) {
+					onPermissionGranted();
+				}
+				break;
+		}
+	}
+
+	@Override
+	public void onPermissionGranted() {
+		Logd(TAG, "onPermissionGranted: ");
+	}
+
+	@Override
+	public void onPermissionPermanentlyDenied() {
+		Logd(TAG, "onPermissionPermanentlyDenied: ");
+		if (dialog == null) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+			dialog = builder.setCancelable(true)
+					.setTitle(tips)
+					.setMessage(message)
+					.setPositiveButton(R.string.confirm, this)
+					.setNegativeButton(R.string.cancel, this).create();
+		}
+		dialog.show();
+	}
+
+	@Override
+	public void onClick(DialogInterface dialogInterface, int which) {
+		if (dialog != null) {
+			dialog.dismiss();
+		}
+		switch (which) {
+			case Dialog.BUTTON_POSITIVE:
+				startActivityForResult(
+						new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+								.setData(Uri.fromParts("package", getContext().getPackageName(), null)),
+						REQUEST_SETTING_CODE);
+				break;
+			case Dialog.BUTTON_NEGATIVE:
+				break;
+		}
+	}
 
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {

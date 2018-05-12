@@ -30,4 +30,9 @@
         <item>全部文档</item>
         <item>文档分类</item>
     </string-array>
+
+    <string name="tips">提示</string>
+    <string name="message">请在应用管理开启权限</string>
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
 </resources>

@@ -164,6 +164,10 @@ public class PermissionRequest {
 	}
 
 	public interface PermissionListener {
+
+		void onPermissionGranted();
+
 		void onPermissionPermanentlyDenied();
+
 	}
 }
