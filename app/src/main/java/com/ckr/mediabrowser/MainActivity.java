@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.ckr.mediabrowser.util.MediaLog;
 import com.ckr.mediabrowser.view.BaseFragment;
+import com.ckr.mediabrowser.view.PAVFCreator;
 import com.ckr.mediabrowser.widget.MyFragmentPagerAdapter;
 
 import butterknife.BindArray;
@@ -20,7 +21,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 	ViewPager viewPager;
 	@BindView(R.id.tabLayout)
 	TabLayout tabLayout;
-	@BindArray(R.array.tab_title)
+	@BindArray(R.array.tab_main)
 	String[] tabTitles;
 	private Unbinder unbinder;
 	BaseFragment[] fragments;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
 	private void initTabLayout() {
 		tabLayout.addTab(tabLayout.newTab().setText(tabTitles[0]), true);
-		viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragments = new BaseFragment[tabTitles.length], tabTitles));
+		viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragments = new BaseFragment[tabTitles.length], tabTitles, PAVFCreator.values()));
 		tabLayout.setupWithViewPager(viewPager);
 		viewPager.addOnPageChangeListener(this);
 	}

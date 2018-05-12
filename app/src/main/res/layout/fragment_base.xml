@@ -2,12 +2,14 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             tools:context="com.ckr.mediabrowser.view.VideoFragment">
+             tools:context="com.ckr.mediabrowser.view.photo.PhotoMainFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <include layout="@layout/tablayout"/>
+
+    <include layout="@layout/viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"/>
+        android:layout_marginTop="?android:attr/actionBarSize"/>
 
 </FrameLayout>

@@ -22,5 +22,5 @@
         app:tabGravity="fill"
         app:tabIndicatorHeight="0dp"
         app:tabMode="fixed"
-        app:tabTextColor="#333"></android.support.design.widget.TabLayout>
+        app:tabTextColor="#333"/>
 </FrameLayout>

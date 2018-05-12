@@ -1,28 +1,28 @@
-package com.ckr.mediabrowser.view;
+package com.ckr.mediabrowser.view.photo;
 
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
 import com.ckr.mediabrowser.R;
+import com.ckr.mediabrowser.view.BaseFragment;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AudioFragment extends BaseFragment {
+public class AlbumFragment extends BaseFragment {
 
-	public static AudioFragment newInstance() {
-		
+	public static AlbumFragment newInstance() {
+
 		Bundle args = new Bundle();
-		
-		AudioFragment fragment = new AudioFragment();
+
+		AlbumFragment fragment = new AlbumFragment();
 		fragment.setArguments(args);
 		return fragment;
 	}
-
 	@Override
 	protected int getLayoutId() {
-		return R.layout.fragment_audio;
+		return R.layout.recycler_view;
 	}
 
 	@Override
