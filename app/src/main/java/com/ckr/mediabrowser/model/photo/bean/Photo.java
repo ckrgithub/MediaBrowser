@@ -1,4 +1,4 @@
-package com.ckr.mediabrowser.model.photo;
+package com.ckr.mediabrowser.model.photo.bean;
 
 import com.ckr.mediabrowser.model.MediaItem;
 

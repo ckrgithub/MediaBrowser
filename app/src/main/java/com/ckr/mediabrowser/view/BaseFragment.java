@@ -29,7 +29,7 @@ import static com.ckr.mediabrowser.util.MediaLog.Logd;
  * Created by PC大佬 on 2018/5/6.
  */
 
-public abstract class BaseFragment extends Fragment implements PermissionRequest.PermissionListener,DialogInterface.OnClickListener {
+public abstract class BaseFragment extends Fragment implements PermissionRequest.PermissionListener, DialogInterface.OnClickListener {
 	private static final String TAG = "BaseFragment";
 	private static final int REQUEST_SETTING_CODE = 2018;
 
@@ -163,4 +163,37 @@ public abstract class BaseFragment extends Fragment implements PermissionRequest
 	protected void onInvisible() {
 	}
 
+	public Dialog createLoadingDialog() {
+		if (getActivity() == null) {
+			return null;
+		} else {
+			Dialog loadingDialog = new Dialog(getActivity(), R.style.Theme_Transparent_Dialog);
+			ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(dp2px(100), dp2px(100));
+			View inflate = View.inflate(getActivity(), R.layout.dialog_loading, null);
+			loadingDialog.addContentView(inflate, params);
+			return loadingDialog;
+		}
+	}
+
+
+	protected void showDialog(Dialog dialog) {
+		if (dialog != null) {
+			if (!dialog.isShowing()) {
+				dialog.show();
+			}
+		}
+	}
+
+	protected void dismissDialog(Dialog dialog) {
+		if (dialog != null) {
+			if (dialog.isShowing()) {
+				dialog.dismiss();
+			}
+		}
+	}
+
+	protected int dp2px(float dp) {
+		final float scale = getResources().getDisplayMetrics().density;
+		return (int) (dp * scale + 0.5f);
+	}
 }
