@@ -22,5 +22,6 @@
         app:tabGravity="fill"
         app:tabIndicatorHeight="0dp"
         app:tabMode="fixed"
+        app:tabSelectedTextColor="@color/colorAccent"
         app:tabTextColor="#333"/>
 </FrameLayout>

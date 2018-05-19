@@ -9,8 +9,9 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/tabLayout_height"
         app:tabGravity="center"
-        app:tabIndicatorColor="@color/colorPrimary"
+        app:tabIndicatorColor="@color/colorAccent"
         app:tabIndicatorHeight="1.3dp"
         app:tabMode="scrollable"
+        app:tabSelectedTextColor="@color/colorAccent"
         app:tabTextColor="#333"></android.support.design.widget.TabLayout>
 </merge>
