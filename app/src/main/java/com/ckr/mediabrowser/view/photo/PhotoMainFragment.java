@@ -18,6 +18,7 @@ import android.util.Log;
 
 import com.ckr.mediabrowser.R;
 import com.ckr.mediabrowser.model.photo.bean.Photo;
+import com.ckr.mediabrowser.observer.MediaObserver;
 import com.ckr.mediabrowser.presenter.photo.PhotoPresenter;
 import com.ckr.mediabrowser.presenter.photo.PhotoPresenterImpl;
 import com.ckr.mediabrowser.util.Constants;
@@ -51,15 +52,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	private Cursor mCursor;
 	private boolean isResume;
 	private Dialog mLoadingDialog;
-
-	public static PhotoMainFragment newInstance() {
-
-		Bundle args = new Bundle();
-
-		PhotoMainFragment fragment = new PhotoMainFragment();
-		fragment.setArguments(args);
-		return fragment;
-	}
+	private MediaObserver mMediaObserver;
 
 	@Override
 	protected int getLayoutId() {
@@ -70,6 +63,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	protected void init() {
 		Logd(TAG, "init: ");
 		initTabLayout();
+		mMediaObserver = MediaObserver.getInstance();
 		new PhotoPresenterImpl(this);
 		if (isVisible) {
 			if (PermissionRequest.requestPermission(this, PermissionRequest.PERMISSION_STORAGE, PermissionRequest.REQUEST_STORAGE)) {
@@ -180,6 +174,11 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 
 	@Override
 	public void updatePhoto(List<Photo> list) {
-
+		if (list.size() == 0) {
+			return;
+		}
+		if (mMediaObserver != null) {
+			mMediaObserver.subscribeOn(list, Constants.MEDIA_TYPE_PHOTO);
+		}
 	}
 }

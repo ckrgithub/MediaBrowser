@@ -7,4 +7,7 @@ import com.ckr.mediabrowser.model.MediaItem;
  */
 
 public class Audio extends MediaItem {
+	public Audio(String path, long size, String displayName, String title, String dateAdded, String dateModified, String mimeType, Long id) {
+		super(path, size, displayName, title, dateAdded, dateModified, mimeType, id);
+	}
 }

@@ -46,7 +46,7 @@ public class MediaObserver {
 		mListeners.clear();
 	}
 
-	public void subscribeOn(List<MediaItem> media, int mediaType) {
+	public void subscribeOn(List<? extends MediaItem> media, int mediaType) {
 		Logd(TAG, "subscribeOnAudio: " + mListeners.size());
 		for (int i = 0; i < mListeners.size(); i++) {
 			OnMediaListener listener = mListeners.get(i);

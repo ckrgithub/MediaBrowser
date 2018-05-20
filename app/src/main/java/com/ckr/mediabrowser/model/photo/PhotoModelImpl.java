@@ -44,7 +44,7 @@ public class PhotoModelImpl implements PhotoModel {
 		if (mExecutor == null) {
 			mExecutor = Executors.newSingleThreadExecutor();
 		}
-		if (future == null) {
+		if (future != null) {
 			boolean cancel = future.cancel(true);
 			Logd(TAG, "loadMedia: cancel:" + cancel);
 		}
