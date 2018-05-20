@@ -1,6 +1,8 @@
 package com.ckr.mediabrowser.view.photo;
 
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -8,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
 import com.bumptech.glide.Glide;
-import com.ckr.decoration.BaseItemDecoration;
 import com.ckr.decoration.DividerGridItemDecoration;
 import com.ckr.mediabrowser.R;
 import com.ckr.mediabrowser.adapter.PhotoAdapter;
@@ -44,6 +45,7 @@ public class PhotoFragment extends BaseFragment implements OnMediaListener<Photo
 	private List<Photo> srcList;
 	private static final int COLUMN = 4;
 	private PhotoAdapter adapter;
+	private Activity activity;
 
 	public static PhotoFragment newInstance() {
 
@@ -52,6 +54,12 @@ public class PhotoFragment extends BaseFragment implements OnMediaListener<Photo
 		PhotoFragment fragment = new PhotoFragment();
 		fragment.setArguments(args);
 		return fragment;
+	}
+
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		activity = (Activity) context;
 	}
 
 	@Override
@@ -82,9 +90,10 @@ public class PhotoFragment extends BaseFragment implements OnMediaListener<Photo
 			}
 		});
 		recyclerView.setLayoutManager(layoutManager);
-		DividerGridItemDecoration decoration = new DividerGridItemDecoration(getContext(), BaseItemDecoration.VERTICAL, COLUMN, R.drawable.bg_divider_grid);
-		decoration.removeLeftDivider(true).removeRightDivider(true);
-		recyclerView.addItemDecoration(decoration);
+		DividerGridItemDecoration.Builder builder = new DividerGridItemDecoration.Builder(getContext(), COLUMN);
+		builder.setDivider(R.drawable.bg_divider_grid)
+				.setShowOtherStyle(true);
+		recyclerView.addItemDecoration(builder.build());
 		adapter = new PhotoAdapter(this, COLUMN);
 		recyclerView.setAdapter(adapter);
 		recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -125,6 +134,7 @@ public class PhotoFragment extends BaseFragment implements OnMediaListener<Photo
 
 	@Override
 	public void subscribeOn(List<Photo> list, int mediaType) {
+		Logd(TAG, "subscribeOn: mediaType:" + mediaType);
 		if (mediaType != IMediaStore.MEDIA_TYPE_PHOTO) {
 			return;
 		}
@@ -157,12 +167,16 @@ public class PhotoFragment extends BaseFragment implements OnMediaListener<Photo
 				}
 				targetList.add(photo);
 			}
-			getActivity().runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					adapter.updateAll(targetList);
-				}
-			});
+			Logd(TAG, "handleData: size:" + size + ",:" + activity);
+			if (activity != null) {
+				activity.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Logd(TAG, "run: size:" + targetList.size());
+						adapter.updateAll(targetList);
+					}
+				});
+			}
 		}
 	}
 

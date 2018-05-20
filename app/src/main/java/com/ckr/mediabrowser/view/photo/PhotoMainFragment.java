@@ -53,6 +53,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	private boolean isResume;
 	private Dialog mLoadingDialog;
 	private MediaObserver mMediaObserver;
+	private boolean isRefresh = false;
 
 	@Override
 	protected int getLayoutId() {
@@ -113,6 +114,9 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	@Override
 	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 		Logd(TAG, "onPageScrolled: position:" + position);
+		if (!isRefresh) {
+			isRefresh = true;
+		}
 	}
 
 	@Override
@@ -174,6 +178,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 
 	@Override
 	public void updatePhoto(List<Photo> list) {
+		Logd(TAG, "updatePhoto: "+list.size());
 		if (list.size() == 0) {
 			return;
 		}

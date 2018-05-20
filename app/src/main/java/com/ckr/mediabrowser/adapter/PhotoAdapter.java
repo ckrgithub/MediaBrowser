@@ -3,14 +3,12 @@ package com.ckr.mediabrowser.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.ckr.mediabrowser.R;
 import com.ckr.mediabrowser.model.photo.bean.Photo;
 import com.ckr.mediabrowser.util.GlideUtil;
@@ -32,7 +30,7 @@ public class PhotoAdapter extends BaseAdapter<Photo, PhotoAdapter.PhotoHolder> {
 		super(context.getContext());
 		this.context = context;
 		float dimension = mContext.getResources().getDimension(R.dimen.divider_size);
-		imageHeight = (int) ((getScreenWidth() - dimension * (column - 1) * 2) / column);
+		imageHeight = (int) ((getScreenWidth() - dimension * (column + 1)) / column);
 		Logd(TAG, "PhotoAdapter: imageHeight:" + imageHeight);
 	}
 
