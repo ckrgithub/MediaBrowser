@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by PC大佬 on 2018/5/20.
@@ -21,6 +22,15 @@ public abstract class BaseAdapter<T, E extends BaseViewHolder> extends RecyclerV
 	public BaseAdapter(Context context){
 		mContext = context;
 		data = new ArrayList<>();
+	}
+
+	public void updateAll(List<T> list) {
+		if (list == null) {
+			return;
+		}
+		this.data.clear();
+		this.data.addAll(list);
+		notifyDataSetChanged();
 	}
 
 	@Override

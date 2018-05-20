@@ -3,9 +3,15 @@ package com.ckr.mediabrowser.view.photo;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.bumptech.glide.Glide;
+import com.ckr.decoration.BaseItemDecoration;
+import com.ckr.decoration.DividerGridItemDecoration;
 import com.ckr.mediabrowser.R;
+import com.ckr.mediabrowser.adapter.PhotoAdapter;
 import com.ckr.mediabrowser.model.IMediaStore;
 import com.ckr.mediabrowser.model.photo.bean.Photo;
 import com.ckr.mediabrowser.observer.MediaObserver;
@@ -17,6 +23,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import butterknife.BindView;
+
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_DRAGGING;
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_SETTLING;
 import static com.ckr.mediabrowser.util.MediaLog.Logd;
 import static com.ckr.mediabrowser.util.MediaLog.Loge;
 
@@ -25,10 +36,14 @@ import static com.ckr.mediabrowser.util.MediaLog.Loge;
  */
 public class PhotoFragment extends BaseFragment implements OnMediaListener<Photo> {
 	private static final String TAG = "PhotoFragment";
+	@BindView(R.id.recyclerView)
+	RecyclerView recyclerView;
 	private boolean isVisible = false;
 	private MediaObserver mMediaObserver;
 	private List<Photo> targetList;
 	private List<Photo> srcList;
+	private static final int COLUMN = 4;
+	private PhotoAdapter adapter;
 
 	public static PhotoFragment newInstance() {
 
@@ -49,8 +64,45 @@ public class PhotoFragment extends BaseFragment implements OnMediaListener<Photo
 		Logd(TAG, "init: ");
 		targetList = new ArrayList<>();
 		srcList = new ArrayList<>();
+		initView();
 		mMediaObserver = MediaObserver.getInstance();
 		mMediaObserver.registerListener(this);
+	}
+
+	private void initView() {
+		GridLayoutManager layoutManager = new GridLayoutManager(getContext(), COLUMN);
+		layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+			@Override
+			public int getSpanSize(int position) {
+				Photo photo = targetList.get(position);
+				if (photo.isLabel()) {
+					return COLUMN;
+				}
+				return 1;
+			}
+		});
+		recyclerView.setLayoutManager(layoutManager);
+		DividerGridItemDecoration decoration = new DividerGridItemDecoration(getContext(), BaseItemDecoration.VERTICAL, COLUMN, R.drawable.bg_divider_grid);
+		decoration.removeLeftDivider(true).removeRightDivider(true);
+		recyclerView.addItemDecoration(decoration);
+		adapter = new PhotoAdapter(this, COLUMN);
+		recyclerView.setAdapter(adapter);
+		recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+				switch (newState) {
+					case SCROLL_STATE_SETTLING:
+						Glide.with(PhotoFragment.this).pauseRequests();
+						break;
+					case SCROLL_STATE_IDLE:
+						Glide.with(PhotoFragment.this).resumeRequests();
+						break;
+					case SCROLL_STATE_DRAGGING:
+						Glide.with(PhotoFragment.this).resumeRequests();
+						break;
+				}
+			}
+		});
 	}
 
 	@Override
@@ -105,6 +157,12 @@ public class PhotoFragment extends BaseFragment implements OnMediaListener<Photo
 				}
 				targetList.add(photo);
 			}
+			getActivity().runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					adapter.updateAll(targetList);
+				}
+			});
 		}
 	}
 

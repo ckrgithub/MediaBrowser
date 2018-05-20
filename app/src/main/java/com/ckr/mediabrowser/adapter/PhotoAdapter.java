@@ -1,24 +1,47 @@
 package com.ckr.mediabrowser.adapter;
 
-import android.app.Activity;
+import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.ckr.mediabrowser.R;
 import com.ckr.mediabrowser.model.photo.bean.Photo;
+import com.ckr.mediabrowser.util.GlideUtil;
 import com.ckr.mediabrowser.view.MediaContext;
+
+import static com.ckr.mediabrowser.util.MediaLog.Logd;
 
 /**
  * Created by PC大佬 on 2018/5/20.
  */
 
 public class PhotoAdapter extends BaseAdapter<Photo, PhotoAdapter.PhotoHolder> {
+	private static final String TAG = "PhotoAdapter";
 
+	private MediaContext context;
+	private int imageHeight;
 
-	public PhotoAdapter(@NonNull MediaContext context) {
+	public PhotoAdapter(@NonNull MediaContext context, int column) {
 		super(context.getContext());
+		this.context = context;
+		float dimension = mContext.getResources().getDimension(R.dimen.divider_size);
+		imageHeight = (int) ((getScreenWidth() - dimension * (column - 1) * 2) / column);
+		Logd(TAG, "PhotoAdapter: imageHeight:" + imageHeight);
+	}
+
+	private int getScreenWidth() {
+		WindowManager manager = (WindowManager) mContext.getSystemService(Context.WINDOW_SERVICE);
+		DisplayMetrics outMetrics = new DisplayMetrics();
+		manager.getDefaultDisplay().getMetrics(outMetrics);
+		int widthPixels = outMetrics.widthPixels;
+		return widthPixels;
 	}
 
 	@Override
@@ -51,11 +74,9 @@ public class PhotoAdapter extends BaseAdapter<Photo, PhotoAdapter.PhotoHolder> {
 		if (getItemViewType(position) == 0) {
 			holder.labelView.setText(photo.getLabelText());
 		} else {
-//			Glide.with(holder.imageView).
-			if (mContext instanceof Activity) {
-
-			}
-
+			String path = photo.getPath();
+			Logd(TAG, "convert: path:"+path);
+			GlideUtil.loadImageByPath(context, holder.imageView, path);
 		}
 	}
 
@@ -70,6 +91,9 @@ public class PhotoAdapter extends BaseAdapter<Photo, PhotoAdapter.PhotoHolder> {
 				labelView = itemView.findViewById(R.id.labelView);
 			} else {
 				imageView = itemView.findViewById(R.id.imageView);
+				ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
+				layoutParams.height = imageHeight;
+				imageView.setLayoutParams(layoutParams);
 			}
 		}
 	}
