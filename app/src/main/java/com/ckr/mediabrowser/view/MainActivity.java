@@ -1,5 +1,6 @@
 package com.ckr.mediabrowser.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -16,7 +17,7 @@ import butterknife.Unbinder;
 
 import static com.ckr.mediabrowser.util.MediaLog.Logd;
 
-public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener {
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,MediaContext {
 	private static final String TAG = "MainActivity";
 
 	@BindView(R.id.myViewPager)
@@ -70,5 +71,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 	@Override
 	public void onPageScrollStateChanged(int state) {
 
+	}
+
+	@Override
+	public Context getContext() {
+		return this;
 	}
 }

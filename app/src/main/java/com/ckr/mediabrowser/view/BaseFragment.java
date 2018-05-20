@@ -29,7 +29,7 @@ import static com.ckr.mediabrowser.util.MediaLog.Logd;
  * Created by PC大佬 on 2018/5/6.
  */
 
-public abstract class BaseFragment extends Fragment implements PermissionRequest.PermissionListener, DialogInterface.OnClickListener {
+public abstract class BaseFragment extends Fragment implements PermissionRequest.PermissionListener, DialogInterface.OnClickListener ,MediaContext{
 	private static final String TAG = "BaseFragment";
 	private static final int REQUEST_SETTING_CODE = 2018;
 
@@ -80,6 +80,12 @@ public abstract class BaseFragment extends Fragment implements PermissionRequest
 	public void onDestroyView() {
 		super.onDestroyView();
 		unbinder.unbind();
+	}
+
+	@Nullable
+	@Override
+	public Context getContext() {
+		return super.getContext();
 	}
 
 	protected abstract int getLayoutId();

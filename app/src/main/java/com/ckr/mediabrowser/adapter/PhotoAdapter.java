@@ -1,13 +1,14 @@
 package com.ckr.mediabrowser.adapter;
 
 import android.app.Activity;
-import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ckr.mediabrowser.R;
 import com.ckr.mediabrowser.model.photo.bean.Photo;
+import com.ckr.mediabrowser.view.MediaContext;
 
 /**
  * Created by PC大佬 on 2018/5/20.
@@ -16,8 +17,8 @@ import com.ckr.mediabrowser.model.photo.bean.Photo;
 public class PhotoAdapter extends BaseAdapter<Photo, PhotoAdapter.PhotoHolder> {
 
 
-	public PhotoAdapter(Context context) {
-		super(context);
+	public PhotoAdapter(@NonNull MediaContext context) {
+		super(context.getContext());
 	}
 
 	@Override
@@ -47,9 +48,9 @@ public class PhotoAdapter extends BaseAdapter<Photo, PhotoAdapter.PhotoHolder> {
 
 	@Override
 	protected void convert(PhotoHolder holder, int position, Photo photo) {
-		if (getItemViewType(position)==0) {
+		if (getItemViewType(position) == 0) {
 			holder.labelView.setText(photo.getLabelText());
-		}else {
+		} else {
 //			Glide.with(holder.imageView).
 			if (mContext instanceof Activity) {
 
