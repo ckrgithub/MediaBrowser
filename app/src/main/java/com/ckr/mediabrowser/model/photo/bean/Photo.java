@@ -21,6 +21,10 @@ public class Photo extends MediaItem {
 		super(path, size, displayName, title, dateAdded, dateModified, mimeType, id);
 	}
 
+	public Photo() {
+		super();
+	}
+
 	public String getDescription() {
 		return description;
 	}
