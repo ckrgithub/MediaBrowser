@@ -4,7 +4,6 @@ import android.database.Cursor;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.ckr.mediabrowser.model.photo.bean.Photo;
 import com.ckr.mediabrowser.presenter.OnDataLoadListener;
@@ -13,12 +12,14 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import static com.ckr.mediabrowser.util.MediaLog.Logd;
+import static com.ckr.mediabrowser.util.MediaLog.Loge;
 
 /**
  * Created by PC大佬 on 2018/5/19.
@@ -69,20 +70,20 @@ public class PhotoModelImpl implements PhotoModel {
 
 		@Override
 		public void run() {
-			splitData(cursor, mediaTable);
+			queryData(cursor, mediaTable);
 		}
 	}
 
 	private List<Photo> data;
-	SimpleDateFormat simpleFormatter = new SimpleDateFormat("yyyy 年 MM 月 dd 日");
+	SimpleDateFormat simpleFormatter = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
 
-	private void splitData(Cursor cursor, String[] mediaTable) {
-		Log.d(TAG, "splitData: mediaTable:" + Arrays.toString(mediaTable) + ",newCursor:" + cursor);
+	private void queryData(Cursor cursor, String[] mediaTable) {
+		Logd(TAG, "queryData: mediaTable:" + Arrays.toString(mediaTable) + ",newCursor:" + cursor);
 		if (data == null) {
 			data = new ArrayList<>();
 		}
 		int count = cursor.getCount();
-		Log.d(TAG, "splitData: count:" + count);
+		Logd(TAG, "queryData: count:" + count);
 		data.clear();
 		for (int i = 0; i < count; i++) {
 			if (cursor.moveToPosition(i)) {
@@ -105,42 +106,42 @@ public class PhotoModelImpl implements PhotoModel {
 				final int isPrivate = cursor.getInt(cursor.getColumnIndex(mediaTable[11]));
 				final double latitude = cursor.getInt(cursor.getColumnIndex(mediaTable[12]));
 				final double longitude = cursor.getInt(cursor.getColumnIndex(mediaTable[13]));
-				final long date = cursor.getLong(cursor.getColumnIndex(mediaTable[14]));
+				final long dateTaken = cursor.getLong(cursor.getColumnIndex(mediaTable[14]));
 				final int orientation = cursor.getInt(cursor.getColumnIndex(mediaTable[15]));
 				final int thumbMagic = cursor.getInt(cursor.getColumnIndex(mediaTable[16]));
 				final String bucketId = cursor.getString(cursor.getColumnIndex(mediaTable[17]));
 				final String bucketDisplayName = cursor.getString(cursor.getColumnIndex(mediaTable[18]));
-				Log.i(TAG, "splitData: id:" + id);
-				Log.e(TAG, "splitData: path:" + path);
-				Log.d(TAG, "splitData: fileSize:" + fileSize);
-				Log.d(TAG, "splitData: displayName:" + displayName);
-				Log.d(TAG, "splitData: title:" + title);
-				Log.d(TAG, "splitData: dateAdded:" + dateAdded);
-				Log.d(TAG, "splitData: dateModified:" + dateModified);
-				Log.d(TAG, "splitData: mimeType:" + mimeType);
-				Log.d(TAG, "splitData: width:" + width);
-				Log.d(TAG, "splitData: height:" + height);
-				Log.d(TAG, "splitData: description:" + description);
-				Log.d(TAG, "splitData: isPrivate:" + isPrivate);
-				Log.d(TAG, "splitData: latitude:" + latitude);
-				Log.d(TAG, "splitData: longitude:" + longitude);
-				Log.d(TAG, "splitData: date:" + date);
-				Log.d(TAG, "splitData: orientation:" + orientation);
-				Log.d(TAG, "splitData: thumbMagic:" + thumbMagic);
-				Log.d(TAG, "splitData: bucketId:" + bucketId);
-				Log.d(TAG, "splitData: bucketDisplayName:" + bucketDisplayName);
-//				String format = "1970 年 01月 01日";
-//				try {
-//					format = simpleFormatter.format(new Date(date));
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-				Photo image = new Photo(path, fileSize, displayName, title, dateAdded + "", dateModified + "", mimeType, id);
+				Logd(TAG, "queryData: id:" + id);
+				Loge(TAG, "queryData: path:" + path);
+				Logd(TAG, "queryData: fileSize:" + fileSize);
+				Logd(TAG, "queryData: displayName:" + displayName);
+				Logd(TAG, "queryData: title:" + title);
+				Logd(TAG, "queryData: dateAdded:" + dateAdded);
+				Logd(TAG, "queryData: dateModified:" + dateModified);
+				Logd(TAG, "queryData: mimeType:" + mimeType);
+				Logd(TAG, "queryData: width:" + width);
+				Logd(TAG, "queryData: height:" + height);
+				Logd(TAG, "queryData: description:" + description);
+				Logd(TAG, "queryData: isPrivate:" + isPrivate);
+				Logd(TAG, "queryData: latitude:" + latitude);
+				Logd(TAG, "queryData: longitude:" + longitude);
+				Logd(TAG, "queryData: dateTaken:" + dateTaken);
+				Logd(TAG, "queryData: orientation:" + orientation);
+				Logd(TAG, "queryData: thumbMagic:" + thumbMagic);
+				Logd(TAG, "queryData: bucketId:" + bucketId);
+				Logd(TAG, "queryData: bucketDisplayName:" + bucketDisplayName);
+				String addedDate = getDate(dateAdded*1000);
+				String modifiedDate = getDate(dateModified*1000);
+				String takenDate = getDate(dateTaken);
+				Logd(TAG, "queryData: addedDate:" + addedDate);
+				Logd(TAG, "queryData: modifiedDate:" + modifiedDate);
+				Logd(TAG, "queryData: takenDate:" + takenDate);
+				Photo image = new Photo(path, fileSize, displayName, title, addedDate, modifiedDate, mimeType, id);
 				image.setDescription(description);
 				image.setPrivate(isPrivate);
 				image.setLatitude(latitude);
 				image.setLongitude(longitude);
-				image.setDateTaken(date + "");
+				image.setDateTaken(takenDate);
 				image.setOrientation(orientation);
 				image.setMiniThumbMagic(thumbMagic);
 				image.setBucketId(bucketId);
@@ -159,5 +160,16 @@ public class PhotoModelImpl implements PhotoModel {
 		if (mOnDataLoadListener != null) {
 			mOnDataLoadListener.onSuccess(data);
 		}
+	}
+
+	private String getDate(long date) {
+		String format = null;
+		try {
+			format = simpleFormatter.format(new Date(date));
+		} catch (Exception e) {
+			e.printStackTrace();
+			format = "1970年01月01日 00:00:00";
+		}
+		return format;
 	}
 }

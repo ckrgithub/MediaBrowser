@@ -130,7 +130,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
 		Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
 		String[] storage = Constants.MEDIA_CONFIG[Constants.MEDIA_TYPE_PHOTO];
-		String orderBy = MediaStore.Images.Media.DATE_TAKEN + ".desc";
+		String orderBy = MediaStore.Images.Media.DATE_TAKEN + " desc";
 		CursorLoader cursorLoader = new CursorLoader(getContext(), uri, storage, null, null, orderBy);
 		return cursorLoader;
 	}
