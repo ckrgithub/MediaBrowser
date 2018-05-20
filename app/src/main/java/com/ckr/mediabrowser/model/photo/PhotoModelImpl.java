@@ -75,7 +75,7 @@ public class PhotoModelImpl implements PhotoModel {
 	}
 
 	private List<Photo> data;
-	SimpleDateFormat simpleFormatter = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+	SimpleDateFormat simpleFormatter = new SimpleDateFormat("yyyy年MM月dd日");
 
 	private void queryData(Cursor cursor, String[] mediaTable) {
 		Logd(TAG, "queryData: mediaTable:" + Arrays.toString(mediaTable) + ",newCursor:" + cursor);
