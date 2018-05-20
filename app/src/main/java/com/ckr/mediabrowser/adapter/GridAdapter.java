@@ -29,7 +29,7 @@ public class GridAdapter extends BaseAdapter<Photo, GridAdapter.PhotoHolder> {
 	public GridAdapter(@NonNull MediaContext context, int column) {
 		super(context.getContext());
 		this.context = context;
-		float dimension = mContext.getResources().getDimension(R.dimen.divider_size);
+		float dimension = mContext.getResources().getDimension(R.dimen.divider_grid);
 		imageHeight = (int) ((getScreenWidth() - dimension * (column + 1)) / column);
 		Logd(TAG, "GridAdapter: imageHeight:" + imageHeight);
 	}
@@ -58,7 +58,7 @@ public class GridAdapter extends BaseAdapter<Photo, GridAdapter.PhotoHolder> {
 		if (viewType == 0) {
 			return R.layout.item_label;
 		} else {
-			return R.layout.item_photo_grid;
+			return R.layout.item_grid;
 		}
 	}
 

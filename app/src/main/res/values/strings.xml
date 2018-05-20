@@ -37,4 +37,6 @@
     <string name="cancel">取消</string>
 
     <string name="text_loading">加载中...</string>
+
+    <string name="album_sum">共%1$d张相册</string>
 </resources>

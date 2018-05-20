@@ -6,6 +6,7 @@ package com.ckr.mediabrowser.model;
 
 public abstract class MediaItem extends MediaLabel implements IMediaStore {
 	protected String path;
+	protected String parentPath;
 	protected long size;
 	protected String displayName;
 	protected String title;
@@ -16,6 +17,7 @@ public abstract class MediaItem extends MediaLabel implements IMediaStore {
 
 	public MediaItem(String path, long size, String displayName, String title, String dateAdded, String dateModified, String mimeType, Long id) {
 		this.path = path;
+		this.parentPath = path.substring(0, path.lastIndexOf("/"));
 		this.size = size;
 		this.displayName = displayName;
 		this.title = title;
@@ -31,6 +33,10 @@ public abstract class MediaItem extends MediaLabel implements IMediaStore {
 
 	public String getPath() {
 		return path;
+	}
+
+	public String getParentPath() {
+		return parentPath;
 	}
 
 	public long getSize() {
