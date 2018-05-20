@@ -2,7 +2,7 @@ package com.ckr.mediabrowser.util;
 
 import android.widget.Toast;
 
-import com.ckr.mediabrowser.MediaBrowserApplication;
+import com.ckr.mediabrowser.view.MediaBrowserApplication;
 
 public class ToastUtils {
 	private static Toast makeText;

@@ -1,4 +1,4 @@
-package com.ckr.mediabrowser;
+package com.ckr.mediabrowser.view;
 
 import android.app.Application;
 import android.content.Context;

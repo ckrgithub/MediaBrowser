@@ -1,5 +1,6 @@
 package com.ckr.mediabrowser.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.widget.ImageView;
@@ -50,6 +51,10 @@ public class PhotoAdapter extends BaseAdapter<Photo, PhotoAdapter.PhotoHolder> {
 			holder.labelView.setText(photo.getLabelText());
 		}else {
 //			Glide.with(holder.imageView).
+			if (mContext instanceof Activity) {
+
+			}
+
 		}
 	}
 

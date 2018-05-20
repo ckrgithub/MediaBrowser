@@ -1,13 +1,12 @@
-package com.ckr.mediabrowser;
+package com.ckr.mediabrowser.view;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
+import com.ckr.mediabrowser.R;
 import com.ckr.mediabrowser.util.MediaLog;
-import com.ckr.mediabrowser.view.BaseFragment;
-import com.ckr.mediabrowser.view.PAVFCreator;
 import com.ckr.mediabrowser.widget.MyFragmentPagerAdapter;
 
 import butterknife.BindArray;
