@@ -20,18 +20,18 @@ import static com.ckr.mediabrowser.util.MediaLog.Logd;
  * Created by PC大佬 on 2018/5/20.
  */
 
-public class PhotoAdapter extends BaseAdapter<Photo, PhotoAdapter.PhotoHolder> {
-	private static final String TAG = "PhotoAdapter";
+public class GridAdapter extends BaseAdapter<Photo, GridAdapter.PhotoHolder> {
+	private static final String TAG = "GridAdapter";
 
 	private MediaContext context;
 	private int imageHeight;
 
-	public PhotoAdapter(@NonNull MediaContext context, int column) {
+	public GridAdapter(@NonNull MediaContext context, int column) {
 		super(context.getContext());
 		this.context = context;
 		float dimension = mContext.getResources().getDimension(R.dimen.divider_size);
 		imageHeight = (int) ((getScreenWidth() - dimension * (column + 1)) / column);
-		Logd(TAG, "PhotoAdapter: imageHeight:" + imageHeight);
+		Logd(TAG, "GridAdapter: imageHeight:" + imageHeight);
 	}
 
 	private int getScreenWidth() {

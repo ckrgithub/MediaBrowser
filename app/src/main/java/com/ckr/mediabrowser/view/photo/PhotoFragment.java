@@ -12,7 +12,7 @@ import android.util.Log;
 import com.bumptech.glide.Glide;
 import com.ckr.decoration.DividerGridItemDecoration;
 import com.ckr.mediabrowser.R;
-import com.ckr.mediabrowser.adapter.PhotoAdapter;
+import com.ckr.mediabrowser.adapter.GridAdapter;
 import com.ckr.mediabrowser.model.IMediaStore;
 import com.ckr.mediabrowser.model.photo.bean.Photo;
 import com.ckr.mediabrowser.observer.MediaObserver;
@@ -44,7 +44,7 @@ public class PhotoFragment extends BaseFragment implements OnMediaListener<Photo
 	private List<Photo> targetList;
 	private List<Photo> srcList;
 	private static final int COLUMN = 4;
-	private PhotoAdapter adapter;
+	private GridAdapter adapter;
 	private Activity activity;
 
 	public static PhotoFragment newInstance() {
@@ -94,7 +94,7 @@ public class PhotoFragment extends BaseFragment implements OnMediaListener<Photo
 		builder.setDivider(R.drawable.bg_divider_grid)
 				.setShowOtherStyle(true);
 		recyclerView.addItemDecoration(builder.build());
-		adapter = new PhotoAdapter(this, COLUMN);
+		adapter = new GridAdapter(this, COLUMN);
 		recyclerView.setAdapter(adapter);
 		recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 			@Override
