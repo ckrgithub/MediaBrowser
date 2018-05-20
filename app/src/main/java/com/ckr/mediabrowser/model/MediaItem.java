@@ -4,7 +4,7 @@ package com.ckr.mediabrowser.model;
  * Created by PC大佬 on 2018/5/19.
  */
 
-public abstract class MediaItem implements MediaStore{
+public abstract class MediaItem implements IMediaStore {
 	protected String path;
 	protected long size;
 	protected String displayName;

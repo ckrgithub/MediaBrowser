@@ -4,7 +4,7 @@ package com.ckr.mediabrowser.model;
  * Created by PC大佬 on 2018/5/20.
  */
 
-public interface MediaStore {
+public interface IMediaStore {
 	int MEDIA_TYPE_PHOTO=0;
 	int MEDIA_TYPE_AUDIO=1;
 	int MEDIA_TYPE_VIDEO=2;

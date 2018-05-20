@@ -6,10 +6,10 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 
 import com.ckr.mediabrowser.R;
+import com.ckr.mediabrowser.model.IMediaStore;
 import com.ckr.mediabrowser.model.photo.bean.Photo;
 import com.ckr.mediabrowser.observer.MediaObserver;
 import com.ckr.mediabrowser.observer.OnMediaListener;
-import com.ckr.mediabrowser.util.Constants;
 import com.ckr.mediabrowser.view.BaseFragment;
 
 import java.util.List;
@@ -66,7 +66,7 @@ public class PhotoFragment extends BaseFragment implements OnMediaListener<Photo
 
 	@Override
 	public void subscribeOn(List<Photo> list, int mediaType) {
-		if (mediaType != Constants.MEDIA_TYPE_PHOTO) {
+		if (mediaType != IMediaStore.MEDIA_TYPE_PHOTO) {
 			return;
 		}
 		synchronized (this) {

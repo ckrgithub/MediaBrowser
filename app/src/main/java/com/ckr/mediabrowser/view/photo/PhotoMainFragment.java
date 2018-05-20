@@ -17,11 +17,11 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 
 import com.ckr.mediabrowser.R;
+import com.ckr.mediabrowser.model.IMediaStore;
 import com.ckr.mediabrowser.model.photo.bean.Photo;
 import com.ckr.mediabrowser.observer.MediaObserver;
 import com.ckr.mediabrowser.presenter.photo.PhotoPresenter;
 import com.ckr.mediabrowser.presenter.photo.PhotoPresenterImpl;
-import com.ckr.mediabrowser.util.Constants;
 import com.ckr.mediabrowser.util.PermissionRequest;
 import com.ckr.mediabrowser.view.BaseFragment;
 import com.ckr.mediabrowser.widget.MyFragmentPagerAdapter;
@@ -82,7 +82,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	@Override
 	public void onPermissionGranted() {
 		Logd(TAG, "onPermissionGranted: ");
-		getActivity().getSupportLoaderManager().initLoader(Constants.MEDIA_TYPE_PHOTO, null, this);
+		getActivity().getSupportLoaderManager().initLoader(IMediaStore.MEDIA_TYPE_PHOTO, null, this);
 	}
 
 	@Override
@@ -129,7 +129,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
 		Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-		String[] storage = Constants.MEDIA_CONFIG[Constants.MEDIA_TYPE_PHOTO];
+		String[] storage = IMediaStore.MEDIA_CONFIG[IMediaStore.MEDIA_TYPE_PHOTO];
 		String orderBy = MediaStore.Images.Media.DATE_TAKEN + " desc";
 		CursorLoader cursorLoader = new CursorLoader(getContext(), uri, storage, null, null, orderBy);
 		return cursorLoader;
@@ -144,7 +144,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 		mCursor = cursor;
 		if (isVisible && isResume) {//fragment可见才更新数据源
 			if (mPhotoPresenter != null) {
-				mPhotoPresenter.loadMedia(cursor, Constants.MEDIA_CONFIG[Constants.MEDIA_TYPE_PHOTO]);
+				mPhotoPresenter.loadMedia(cursor, IMediaStore.MEDIA_CONFIG[IMediaStore.MEDIA_TYPE_PHOTO]);
 			}
 		}
 	}
@@ -178,7 +178,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 			return;
 		}
 		if (mMediaObserver != null) {
-			mMediaObserver.subscribeOn(list, Constants.MEDIA_TYPE_PHOTO);
+			mMediaObserver.subscribeOn(list, IMediaStore.MEDIA_TYPE_PHOTO);
 		}
 	}
 }
