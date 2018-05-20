@@ -92,4 +92,9 @@ public class Photo extends MediaItem {
 	public void setBucketDisplayName(String bucketDisplayName) {
 		this.bucketDisplayName = bucketDisplayName;
 	}
+
+	@Override
+	public int getMediaType() {
+		return MEDIA_TYPE_PHOTO;
+	}
 }

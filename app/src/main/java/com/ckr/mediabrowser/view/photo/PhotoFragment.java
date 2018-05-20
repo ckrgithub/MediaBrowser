@@ -26,13 +26,14 @@ public class PhotoFragment extends BaseFragment implements OnMediaListener<Photo
 	private MediaObserver mMediaObserver;
 
 	public static PhotoFragment newInstance() {
-		
+
 		Bundle args = new Bundle();
-		
+
 		PhotoFragment fragment = new PhotoFragment();
 		fragment.setArguments(args);
 		return fragment;
 	}
+
 	@Override
 	protected int getLayoutId() {
 		return R.layout.recycler_view;
@@ -65,10 +66,18 @@ public class PhotoFragment extends BaseFragment implements OnMediaListener<Photo
 
 	@Override
 	public void subscribeOn(List<Photo> list, int mediaType) {
-		if (mediaType!= Constants.MEDIA_TYPE_PHOTO) {
+		if (mediaType != Constants.MEDIA_TYPE_PHOTO) {
 			return;
 		}
+		synchronized (this) {
+			handleData(list);
+		}
+	}
 
+	private void handleData(List<Photo> list) {
+		if (list.size()>0) {
+
+		}
 	}
 
 	@Override

@@ -4,9 +4,7 @@ package com.ckr.mediabrowser.model;
  * Created by PC大佬 on 2018/5/19.
  */
 
-public abstract class MediaItem {
-
-
+public abstract class MediaItem implements MediaStore{
 	protected String path;
 	protected long size;
 	protected String displayName;
@@ -25,5 +23,37 @@ public abstract class MediaItem {
 		this.dateModified = dateModified;
 		this.mimeType = mimeType;
 		this.id = id;
+	}
+
+	public String getPath() {
+		return path;
+	}
+
+	public long getSize() {
+		return size;
+	}
+
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public String getDateAdded() {
+		return dateAdded;
+	}
+
+	public String getDateModified() {
+		return dateModified;
+	}
+
+	public String getMimeType() {
+		return mimeType;
+	}
+
+	public Long getId() {
+		return id;
 	}
 }
