@@ -12,10 +12,13 @@ import com.ckr.mediabrowser.observer.MediaObserver;
 import com.ckr.mediabrowser.observer.OnMediaListener;
 import com.ckr.mediabrowser.view.BaseFragment;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import static com.ckr.mediabrowser.util.MediaLog.Logd;
+import static com.ckr.mediabrowser.util.MediaLog.Loge;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,6 +27,8 @@ public class PhotoFragment extends BaseFragment implements OnMediaListener<Photo
 	private static final String TAG = "PhotoFragment";
 	private boolean isVisible = false;
 	private MediaObserver mMediaObserver;
+	private List<Photo> targetList;
+	private List<Photo> srcList;
 
 	public static PhotoFragment newInstance() {
 
@@ -42,6 +47,8 @@ public class PhotoFragment extends BaseFragment implements OnMediaListener<Photo
 	@Override
 	protected void init() {
 		Logd(TAG, "init: ");
+		targetList = new ArrayList<>();
+		srcList = new ArrayList<>();
 		mMediaObserver = MediaObserver.getInstance();
 		mMediaObserver.registerListener(this);
 	}
@@ -74,9 +81,30 @@ public class PhotoFragment extends BaseFragment implements OnMediaListener<Photo
 		}
 	}
 
-	private void handleData(List<Photo> list) {
-		if (list.size()>0) {
+	private final Map<String, Integer> hashMap = new HashMap<String, Integer>();
 
+	private void handleData(List<Photo> list) {
+		if (list.size() > 0) {
+			hashMap.clear();
+			targetList.clear();
+			srcList.clear();
+			srcList.addAll(list);
+			int size = srcList.size();
+			for (int i = 0; i < size; i++) {
+				Photo photo = srcList.get(i);
+				String dateTaken = photo.getDateTaken();
+				if (hashMap.containsKey(dateTaken)) {
+					Logd(TAG, "handleData: 已添加日期:" + dateTaken);
+				} else {
+					Loge(TAG, "handleData: 未添加日期:" + dateTaken);
+					hashMap.put(dateTaken, i);
+					Photo label = new Photo();
+					label.setLabel(true);
+					label.setLabelText(dateTaken);
+					targetList.add(targetList.size(), label);
+				}
+				targetList.add(photo);
+			}
 		}
 	}
 
