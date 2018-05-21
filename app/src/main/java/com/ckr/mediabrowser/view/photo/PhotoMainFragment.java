@@ -33,6 +33,8 @@ import java.util.List;
 import butterknife.BindArray;
 import butterknife.BindView;
 
+import static com.ckr.mediabrowser.model.IMediaStore.MEDIA_TABLE;
+import static com.ckr.mediabrowser.model.IMediaStore.MEDIA_TYPE_PHOTO;
 import static com.ckr.mediabrowser.util.MediaLog.Logd;
 
 /**
@@ -66,7 +68,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 		Logd(TAG, "init: ");
 		initTabLayout();
 		mMediaObserver = MediaObserver.getInstance();
-		new MediaPresenterImpl(this,IMediaStore.MEDIA_TYPE_PHOTO);
+		new MediaPresenterImpl(this, IMediaStore.MEDIA_TYPE_PHOTO);
 		if (isVisible) {
 			if (PermissionRequest.requestPermission(this, PermissionRequest.PERMISSION_STORAGE, PermissionRequest.REQUEST_STORAGE)) {
 				onPermissionGranted();
@@ -90,12 +92,14 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	@Override
 	public void onResume() {
 		super.onResume();
-		Logd(TAG, "onResume: isDelayLoad:"+isDelayLoad);
+		Logd(TAG, "onResume: isDelayLoad:" + isDelayLoad);
 		isResume = true;
-		if (isDelayLoad) {
-			isDelayLoad=false;
-			if (mMediaPresenter != null) {
-				mMediaPresenter.loadMedia(mCursor, IMediaStore.MEDIA_CONFIG[IMediaStore.MEDIA_TYPE_PHOTO]);
+		if (isVisible) {
+			if (isDelayLoad) {
+				isDelayLoad = false;
+				if (mMediaPresenter != null) {
+					mMediaPresenter.loadMedia(mCursor, MEDIA_TABLE[IMediaStore.MEDIA_TYPE_PHOTO]);
+				}
 			}
 		}
 	}
@@ -119,6 +123,14 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	}
 
 	@Override
+	public void refreshFragment() {
+		Logd(TAG, "refreshFragment: isVisible" + isVisible);
+		if (isVisible) {
+			mMediaPresenter.loadMedia(mCursor, MEDIA_TABLE[MEDIA_TYPE_PHOTO]);
+		}
+	}
+
+	@Override
 	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 		Logd(TAG, "onPageScrolled: position:" + position);
 	}
@@ -136,7 +148,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
 		Uri uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-		String[] storage = IMediaStore.MEDIA_CONFIG[IMediaStore.MEDIA_TYPE_PHOTO];
+		String[] storage = MEDIA_TABLE[IMediaStore.MEDIA_TYPE_PHOTO];
 		String orderBy = MediaStore.Images.Media.DATE_TAKEN + " desc";
 		CursorLoader cursorLoader = new CursorLoader(getContext(), uri, storage, null, null, orderBy);
 		return cursorLoader;
@@ -145,13 +157,13 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	@Override
 	public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
 		Logd(TAG, "onLoadFinished: cursor:" + cursor + ",mCursor:" + mCursor);
-		if (null!=cursor&&mCursor == cursor) {//cursor没变，无需更新数据源
+		if (null != cursor && mCursor == cursor) {//cursor没变，无需更新数据源
 			return;
 		}
 		mCursor = cursor;
 		if (isVisible && isResume) {//fragment可见才更新数据源
 			if (mMediaPresenter != null) {
-				mMediaPresenter.loadMedia(cursor, IMediaStore.MEDIA_CONFIG[IMediaStore.MEDIA_TYPE_PHOTO]);
+				mMediaPresenter.loadMedia(cursor, MEDIA_TABLE[IMediaStore.MEDIA_TYPE_PHOTO]);
 			}
 		} else {
 			isDelayLoad = true;

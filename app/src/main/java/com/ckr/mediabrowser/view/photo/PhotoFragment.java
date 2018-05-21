@@ -123,6 +123,11 @@ public class PhotoFragment extends BaseFragment implements OnMediaListener<Photo
 	}
 
 	@Override
+	public void refreshFragment() {
+
+	}
+
+	@Override
 	public void subscribeOn(List<Photo> list, int mediaType) {
 		Logd(TAG, "subscribeOn: mediaType:" + mediaType);
 		if (mediaType != IMediaStore.MEDIA_TYPE_PHOTO) {

@@ -54,4 +54,9 @@ public class AudioCategoryFragment extends BaseFragment {
 		isVisible = false;
 	}
 
+	@Override
+	public void refreshFragment() {
+
+	}
+
 }

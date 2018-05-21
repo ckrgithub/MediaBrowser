@@ -45,6 +45,11 @@ public class VideoMainFragment extends BaseFragment implements ViewPager.OnPageC
 		initTabLayout();
 	}
 
+	@Override
+	public void refreshFragment() {
+
+	}
+
 	private void initTabLayout() {
 		tabLayout.addTab(tabLayout.newTab().setText(tabTitles[0]), true);
 		viewPager.setAdapter(new MyFragmentPagerAdapter(getChildFragmentManager(), fragments = new BaseFragment[tabTitles.length], tabTitles,VideoCreator.values()));

@@ -169,6 +169,8 @@ public abstract class BaseFragment extends Fragment implements PermissionRequest
 	protected void onInvisible() {
 	}
 
+	public abstract void refreshFragment();
+
 	public Dialog createLoadingDialog() {
 		if (getActivity() == null) {
 			return null;
@@ -180,7 +182,6 @@ public abstract class BaseFragment extends Fragment implements PermissionRequest
 			return loadingDialog;
 		}
 	}
-
 
 	protected void showDialog(Dialog dialog) {
 		if (dialog != null) {

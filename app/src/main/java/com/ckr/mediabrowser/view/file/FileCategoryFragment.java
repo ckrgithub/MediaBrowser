@@ -30,4 +30,9 @@ public class FileCategoryFragment extends BaseFragment {
 
 	}
 
+	@Override
+	public void refreshFragment() {
+
+	}
+
 }

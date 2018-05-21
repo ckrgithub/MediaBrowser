@@ -9,7 +9,7 @@ public interface IMediaStore {
 	int MEDIA_TYPE_AUDIO=1;
 	int MEDIA_TYPE_VIDEO=2;
 	int MEDIA_TYPE_FILE=3;
-	String[][] MEDIA_CONFIG = {
+	String[][] MEDIA_TABLE = {
 			//图片数据库的列
 			{
 					android.provider.MediaStore.Images.Media._ID,

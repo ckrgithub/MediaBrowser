@@ -33,6 +33,8 @@ import java.util.List;
 import butterknife.BindArray;
 import butterknife.BindView;
 
+import static com.ckr.mediabrowser.model.IMediaStore.MEDIA_TABLE;
+import static com.ckr.mediabrowser.model.IMediaStore.MEDIA_TYPE_AUDIO;
 import static com.ckr.mediabrowser.util.MediaLog.Logd;
 
 /**
@@ -48,7 +50,7 @@ public class AudioMainFragment extends BaseFragment implements ViewPager.OnPageC
 	@BindArray(R.array.tab_audio)
 	String[] tabTitles;
 	private BaseFragment[] fragments;
-	private boolean isVisible=false;
+	private boolean isVisible = false;
 	private MediaPresenter mMediaPresenter;
 	private Cursor mCursor;
 	private boolean isResume;
@@ -92,10 +94,12 @@ public class AudioMainFragment extends BaseFragment implements ViewPager.OnPageC
 		super.onResume();
 		Logd(TAG, "onResume: ");
 		isResume = true;
-		if (isDelayLoad) {
-			isDelayLoad=false;
-			if (mMediaPresenter != null) {
-				mMediaPresenter.loadMedia(mCursor, IMediaStore.MEDIA_CONFIG[IMediaStore.MEDIA_TYPE_AUDIO]);
+		if (isVisible) {
+			if (isDelayLoad) {
+				isDelayLoad = false;
+				if (mMediaPresenter != null) {
+					mMediaPresenter.loadMedia(mCursor, IMediaStore.MEDIA_TABLE[IMediaStore.MEDIA_TYPE_AUDIO]);
+				}
 			}
 		}
 	}
@@ -119,6 +123,14 @@ public class AudioMainFragment extends BaseFragment implements ViewPager.OnPageC
 	}
 
 	@Override
+	public void refreshFragment() {
+		Logd(TAG, "refreshFragment: isVisible" + isVisible);
+		if (isVisible) {
+			mMediaPresenter.loadMedia(mCursor, MEDIA_TABLE[MEDIA_TYPE_AUDIO]);
+		}
+	}
+
+	@Override
 	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 		Logd(TAG, "onPageScrolled: position:" + position);
 	}
@@ -136,7 +148,7 @@ public class AudioMainFragment extends BaseFragment implements ViewPager.OnPageC
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
 		Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-		String[] storage = IMediaStore.MEDIA_CONFIG[IMediaStore.MEDIA_TYPE_AUDIO];
+		String[] storage = IMediaStore.MEDIA_TABLE[IMediaStore.MEDIA_TYPE_AUDIO];
 		String orderBy = MediaStore.Images.Media.DATE_MODIFIED + " desc";
 		CursorLoader cursorLoader = new CursorLoader(getContext(), uri, storage, null, null, orderBy);
 		return cursorLoader;
@@ -151,7 +163,7 @@ public class AudioMainFragment extends BaseFragment implements ViewPager.OnPageC
 		mCursor = cursor;
 		if (isVisible && isResume) {//fragment可见才更新数据源
 			if (mMediaPresenter != null) {
-				mMediaPresenter.loadMedia(cursor, IMediaStore.MEDIA_CONFIG[IMediaStore.MEDIA_TYPE_AUDIO]);
+				mMediaPresenter.loadMedia(cursor, IMediaStore.MEDIA_TABLE[IMediaStore.MEDIA_TYPE_AUDIO]);
 			}
 		} else {
 			isDelayLoad = true;

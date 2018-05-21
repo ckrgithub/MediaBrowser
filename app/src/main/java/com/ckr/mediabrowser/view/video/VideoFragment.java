@@ -30,4 +30,9 @@ public class VideoFragment extends BaseFragment {
 
 	}
 
+	@Override
+	public void refreshFragment() {
+
+	}
+
 }

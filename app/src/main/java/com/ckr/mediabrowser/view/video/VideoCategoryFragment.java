@@ -30,4 +30,9 @@ public class VideoCategoryFragment extends BaseFragment {
 
 	}
 
+	@Override
+	public void refreshFragment() {
+
+	}
+
 }
