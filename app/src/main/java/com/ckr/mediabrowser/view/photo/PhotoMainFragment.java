@@ -49,7 +49,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	String[] tabTitles;
 	private BaseFragment[] fragments;
 	private boolean isVisible = false;
-	private MediaPresenter mPhotoPresenter;
+	private MediaPresenter mMediaPresenter;
 	private Cursor mCursor;
 	private boolean isResume;
 	private Dialog mLoadingDialog;
@@ -66,7 +66,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 		Logd(TAG, "init: ");
 		initTabLayout();
 		mMediaObserver = MediaObserver.getInstance();
-		new MediaPresenterImpl(this);
+		new MediaPresenterImpl(this,IMediaStore.MEDIA_TYPE_PHOTO);
 		if (isVisible) {
 			if (PermissionRequest.requestPermission(this, PermissionRequest.PERMISSION_STORAGE, PermissionRequest.REQUEST_STORAGE)) {
 				onPermissionGranted();
@@ -94,8 +94,8 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 		isResume = true;
 		if (isDelayLoad) {
 			isDelayLoad=false;
-			if (mPhotoPresenter != null) {
-				mPhotoPresenter.loadMedia(mCursor, IMediaStore.MEDIA_CONFIG[IMediaStore.MEDIA_TYPE_PHOTO]);
+			if (mMediaPresenter != null) {
+				mMediaPresenter.loadMedia(mCursor, IMediaStore.MEDIA_CONFIG[IMediaStore.MEDIA_TYPE_PHOTO]);
 			}
 		}
 	}
@@ -145,13 +145,13 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	@Override
 	public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
 		Logd(TAG, "onLoadFinished: cursor:" + cursor + ",mCursor:" + mCursor);
-		if (mCursor == cursor) {//cursor没变，无需更新数据源
+		if (null!=cursor&&mCursor == cursor) {//cursor没变，无需更新数据源
 			return;
 		}
 		mCursor = cursor;
 		if (isVisible && isResume) {//fragment可见才更新数据源
-			if (mPhotoPresenter != null) {
-				mPhotoPresenter.loadMedia(cursor, IMediaStore.MEDIA_CONFIG[IMediaStore.MEDIA_TYPE_PHOTO]);
+			if (mMediaPresenter != null) {
+				mMediaPresenter.loadMedia(cursor, IMediaStore.MEDIA_CONFIG[IMediaStore.MEDIA_TYPE_PHOTO]);
 			}
 		} else {
 			isDelayLoad = true;
@@ -164,8 +164,8 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	}
 
 	@Override
-	public void setPresenter(MediaPresenter photoPresenter) {
-		mPhotoPresenter = photoPresenter;
+	public void setPresenter(MediaPresenter mediaPresenter) {
+		mMediaPresenter = mediaPresenter;
 	}
 
 	@Override

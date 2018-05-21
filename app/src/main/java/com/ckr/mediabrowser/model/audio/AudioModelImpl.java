@@ -1,4 +1,4 @@
-package com.ckr.mediabrowser.model.photo;
+package com.ckr.mediabrowser.model.audio;
 
 import android.database.Cursor;
 import android.os.Handler;
@@ -6,7 +6,6 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 
 import com.ckr.mediabrowser.model.MediaModel;
-import com.ckr.mediabrowser.model.photo.bean.Photo;
 import com.ckr.mediabrowser.presenter.OnDataLoadListener;
 
 import java.io.File;
@@ -26,15 +25,15 @@ import static com.ckr.mediabrowser.util.MediaLog.Loge;
  * Created by PC大佬 on 2018/5/19.
  */
 
-public class PhotoModelImpl implements MediaModel {
-	private static final String TAG = "PhotoModelImpl";
+public class AudioModelImpl implements MediaModel {
+	private static final String TAG = "AudioModelImpl";
 	private static final int MINIMUM_SIZE = 5 * 1024;
 	private OnDataLoadListener mOnDataLoadListener;
 	private ExecutorService mExecutor;
 	private Future<?> future;
 	private final Handler mHandler = new Handler(Looper.myLooper());
 
-	public PhotoModelImpl(@NonNull OnDataLoadListener listener) {
+	public AudioModelImpl(@NonNull OnDataLoadListener listener) {
 		mOnDataLoadListener = listener;
 	}
 
@@ -51,19 +50,19 @@ public class PhotoModelImpl implements MediaModel {
 			Logd(TAG, "loadMedia: cancel:" + cancel);
 		}
 		mOnDataLoadListener.showLoadingDialog();
-		future = mExecutor.submit(new PhotoRunnable(cursor, mediaTable));
+		future = mExecutor.submit(new AudioRunnable(cursor, mediaTable));
 	}
 
 	@Override
 	public void onDestroy() {
 	}
 
-	private final class PhotoRunnable implements Runnable {
+	private final class AudioRunnable implements Runnable {
 
 		private Cursor cursor;
 		private String[] mediaTable;
 
-		public PhotoRunnable(Cursor cursor, String[] mediaTable) {
+		public AudioRunnable(Cursor cursor, String[] mediaTable) {
 			this.cursor = cursor;
 			this.mediaTable = mediaTable;
 		}
@@ -74,7 +73,7 @@ public class PhotoModelImpl implements MediaModel {
 		}
 	}
 
-	private List<Photo> data;
+	private List<Audio> data;
 	SimpleDateFormat simpleFormatter = new SimpleDateFormat("yyyy年MM月dd日");
 
 	private void queryData(Cursor cursor, String[] mediaTable) {
@@ -102,15 +101,17 @@ public class PhotoModelImpl implements MediaModel {
 				final String width = cursor.getString(cursor.getColumnIndex(mediaTable[8]));
 				final String height = cursor.getString(cursor.getColumnIndex(mediaTable[9]));
 
-				final String description = cursor.getString(cursor.getColumnIndex(mediaTable[10]));
-				final int isPrivate = cursor.getInt(cursor.getColumnIndex(mediaTable[11]));
-				final double latitude = cursor.getInt(cursor.getColumnIndex(mediaTable[12]));
-				final double longitude = cursor.getInt(cursor.getColumnIndex(mediaTable[13]));
-				final long dateTaken = cursor.getLong(cursor.getColumnIndex(mediaTable[14]));
-				final int orientation = cursor.getInt(cursor.getColumnIndex(mediaTable[15]));
-				final int thumbMagic = cursor.getInt(cursor.getColumnIndex(mediaTable[16]));
-				final String bucketId = cursor.getString(cursor.getColumnIndex(mediaTable[17]));
-				final String bucketDisplayName = cursor.getString(cursor.getColumnIndex(mediaTable[18]));
+				final long duration = cursor.getLong(cursor.getColumnIndex(mediaTable[10]));
+				final long artistId = cursor.getLong(cursor.getColumnIndex(mediaTable[11]));
+				final String artist = cursor.getString(cursor.getColumnIndex(mediaTable[12]));
+				final long albumId = cursor.getLong(cursor.getColumnIndex(mediaTable[13]));
+				final String album = cursor.getString(cursor.getColumnIndex(mediaTable[14]));
+				final int year = cursor.getInt(cursor.getColumnIndex(mediaTable[15]));
+				final int isMusic = cursor.getInt(cursor.getColumnIndex(mediaTable[16]));
+				final int isPodcast = cursor.getInt(cursor.getColumnIndex(mediaTable[17]));
+				final int isRingtone = cursor.getInt(cursor.getColumnIndex(mediaTable[18]));
+				final int isAlarm = cursor.getInt(cursor.getColumnIndex(mediaTable[19]));
+				final int isNotification = cursor.getInt(cursor.getColumnIndex(mediaTable[20]));
 				Logd(TAG, "queryData: id:" + id);
 				Loge(TAG, "queryData: path:" + path);
 				Logd(TAG, "queryData: fileSize:" + fileSize);
@@ -121,33 +122,35 @@ public class PhotoModelImpl implements MediaModel {
 				Logd(TAG, "queryData: mimeType:" + mimeType);
 				Logd(TAG, "queryData: width:" + width);
 				Logd(TAG, "queryData: height:" + height);
-
-				Logd(TAG, "queryData: description:" + description);
-				Logd(TAG, "queryData: isPrivate:" + isPrivate);
-				Logd(TAG, "queryData: latitude:" + latitude);
-				Logd(TAG, "queryData: longitude:" + longitude);
-				Logd(TAG, "queryData: dateTaken:" + dateTaken);
-				Logd(TAG, "queryData: orientation:" + orientation);
-				Logd(TAG, "queryData: thumbMagic:" + thumbMagic);
-				Logd(TAG, "queryData: bucketId:" + bucketId);
-				Logd(TAG, "queryData: bucketDisplayName:" + bucketDisplayName);
+				
+				Logd(TAG, "queryData: duration:" + duration);
+				Logd(TAG, "queryData: artistId:" + artistId);
+				Logd(TAG, "queryData: artist:" + artist);
+				Logd(TAG, "queryData: albumId:" + albumId);
+				Logd(TAG, "queryData: album:" + album);
+				Logd(TAG, "queryData: year:" + year);
+				Logd(TAG, "queryData: isMusic:" + isMusic);
+				Logd(TAG, "queryData: isPodcast:" + isPodcast);
+				Logd(TAG, "queryData: isRingtone:" + isRingtone);
+				Logd(TAG, "queryData: isAlarm:" + isAlarm);
+				Logd(TAG, "queryData: isNotification:" + isNotification);
 				String addedDate = getDate(dateAdded*1000);
 				String modifiedDate = getDate(dateModified*1000);
-				String takenDate = getDate(dateTaken);
 				Logd(TAG, "queryData: addedDate:" + addedDate);
 				Logd(TAG, "queryData: modifiedDate:" + modifiedDate);
-				Logd(TAG, "queryData: takenDate:" + takenDate);
-				Photo photo = new Photo(path, fileSize, displayName, title, addedDate, modifiedDate, mimeType, id);
-				photo.setDescription(description);
-				photo.setPrivate(isPrivate);
-				photo.setLatitude(latitude);
-				photo.setLongitude(longitude);
-				photo.setDateTaken(takenDate);
-				photo.setOrientation(orientation);
-				photo.setMiniThumbMagic(thumbMagic);
-				photo.setBucketId(bucketId);
-				photo.setBucketDisplayName(bucketDisplayName);
-				data.add(photo);
+				Audio audio = new Audio(path, fileSize, displayName, title, addedDate, modifiedDate, mimeType, id);
+				audio.setDuration(duration);
+				audio.setArtistId(artistId);
+				audio.setArtist(artist);
+				audio.setAlbumId(albumId);
+				audio.setAlbum(album);
+				audio.setYear(year);
+				audio.setIsMusic(isMusic);
+				audio.setIsPodcast(isPodcast);
+				audio.setIsRingtone(isRingtone);
+				audio.setIsAlarm(isAlarm);
+				audio.setIsNotification(isNotification);
+				data.add(audio);
 			}
 		}
 		mHandler.post(new Runnable() {
