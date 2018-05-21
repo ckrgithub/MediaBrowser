@@ -20,10 +20,11 @@ import com.ckr.mediabrowser.R;
 import com.ckr.mediabrowser.model.IMediaStore;
 import com.ckr.mediabrowser.model.photo.bean.Photo;
 import com.ckr.mediabrowser.observer.MediaObserver;
-import com.ckr.mediabrowser.presenter.photo.PAVPresenter;
-import com.ckr.mediabrowser.presenter.photo.PAVPresenterImpl;
+import com.ckr.mediabrowser.presenter.MediaPresenter;
+import com.ckr.mediabrowser.presenter.MediaPresenterImpl;
 import com.ckr.mediabrowser.util.PermissionRequest;
 import com.ckr.mediabrowser.view.BaseFragment;
+import com.ckr.mediabrowser.view.MediaView;
 import com.ckr.mediabrowser.widget.MyFragmentPagerAdapter;
 import com.ckr.mediabrowser.widget.MyViewPager;
 
@@ -48,7 +49,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	String[] tabTitles;
 	private BaseFragment[] fragments;
 	private boolean isVisible = false;
-	private PAVPresenter mPhotoPresenter;
+	private MediaPresenter mPhotoPresenter;
 	private Cursor mCursor;
 	private boolean isResume;
 	private Dialog mLoadingDialog;
@@ -65,7 +66,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 		Logd(TAG, "init: ");
 		initTabLayout();
 		mMediaObserver = MediaObserver.getInstance();
-		new PAVPresenterImpl(this);
+		new MediaPresenterImpl(this);
 		if (isVisible) {
 			if (PermissionRequest.requestPermission(this, PermissionRequest.PERMISSION_STORAGE, PermissionRequest.REQUEST_STORAGE)) {
 				onPermissionGranted();
@@ -163,7 +164,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	}
 
 	@Override
-	public void setPresenter(PAVPresenter photoPresenter) {
+	public void setPresenter(MediaPresenter photoPresenter) {
 		mPhotoPresenter = photoPresenter;
 	}
 

@@ -1,4 +1,4 @@
-package com.ckr.mediabrowser.presenter.photo;
+package com.ckr.mediabrowser.presenter;
 
 import android.database.Cursor;
 import android.support.annotation.NonNull;
@@ -6,8 +6,7 @@ import android.support.annotation.NonNull;
 import com.ckr.mediabrowser.model.MediaItem;
 import com.ckr.mediabrowser.model.photo.PhotoModel;
 import com.ckr.mediabrowser.model.photo.PhotoModelImpl;
-import com.ckr.mediabrowser.presenter.OnDataLoadListener;
-import com.ckr.mediabrowser.view.photo.MediaView;
+import com.ckr.mediabrowser.view.MediaView;
 
 import java.util.List;
 
@@ -15,12 +14,12 @@ import java.util.List;
  * Created by PC大佬 on 2018/5/19.
  */
 
-public class PAVPresenterImpl implements PAVPresenter, OnDataLoadListener<MediaItem> {
+public class MediaPresenterImpl implements MediaPresenter, OnDataLoadListener<MediaItem> {
 
 	private MediaView mPhotoView;
 	private PhotoModel mPhotoModel;
 
-	public PAVPresenterImpl(@NonNull MediaView view) {
+	public MediaPresenterImpl(@NonNull MediaView view) {
 		mPhotoView = view;
 		mPhotoView.setPresenter(this);
 		mPhotoModel = new PhotoModelImpl(this);
