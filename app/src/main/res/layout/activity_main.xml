@@ -8,13 +8,13 @@
     tools:context="com.ckr.mediabrowser.view.MainActivity">
 
 
-    <com.ckr.mediabrowser.widget.MyViewPager
-        android:id="@+id/myViewPager"
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPager"
         android:layout_marginBottom="?android:attr/actionBarSize"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </com.ckr.mediabrowser.widget.MyViewPager>
+    </android.support.v4.view.ViewPager>
     <!--<include-->
         <!--layout="@layout/viewpager"-->
         <!--android:layout_width="match_parent"-->

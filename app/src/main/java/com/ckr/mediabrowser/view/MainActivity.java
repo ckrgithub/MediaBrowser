@@ -20,7 +20,7 @@ import static com.ckr.mediabrowser.util.MediaLog.Logd;
 public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,MediaContext {
 	private static final String TAG = "MainActivity";
 
-	@BindView(R.id.myViewPager)
+	@BindView(R.id.viewPager)
 	ViewPager viewPager;
 	@BindView(R.id.tabLayout)
 	TabLayout tabLayout;
