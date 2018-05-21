@@ -3,7 +3,6 @@ package com.ckr.mediabrowser.view.photo;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -45,18 +44,9 @@ public class AlbumFragment extends BaseFragment implements OnMediaListener<Photo
 	private boolean isVisible = false;
 	private MediaObserver mMediaObserver;
 	private List<Album> targetList;
-	private List<String> nameList;
+	private List<String> pathList;
 	private LinearAdapter adapter;
 	private Activity activity;
-
-	public static AlbumFragment newInstance() {
-
-		Bundle args = new Bundle();
-
-		AlbumFragment fragment = new AlbumFragment();
-		fragment.setArguments(args);
-		return fragment;
-	}
 
 	@Override
 	public void onAttach(Context context) {
@@ -73,7 +63,7 @@ public class AlbumFragment extends BaseFragment implements OnMediaListener<Photo
 	protected void init() {
 		Logd(TAG, "init: ");
 		targetList = new ArrayList<>();
-		nameList = new ArrayList<>();
+		pathList = new ArrayList<>();
 		initView();
 		mMediaObserver = MediaObserver.getInstance();
 		mMediaObserver.registerListener(this);
@@ -141,20 +131,19 @@ public class AlbumFragment extends BaseFragment implements OnMediaListener<Photo
 		if (list.size() > 0) {
 			hashMap.clear();
 			targetList.clear();
-			nameList.clear();
+			pathList.clear();
 			int size = list.size();
 			List<MediaItem> data = null;
 			for (int i = 0; i < size; i++) {
 				Photo photo = list.get(i);
 				String parentPath = photo.getParentPath();
 				String name = parentPath.substring(parentPath.lastIndexOf("/") + 1, parentPath.length());
-				if (nameList.contains(parentPath)) {
+				if (pathList.contains(parentPath)) {
 					List<MediaItem> mediaItems = hashMap.get(name);
 					mediaItems.add(photo);
-//					hashMap.put(name,mediaItems);
 				} else {
 					data = new ArrayList<>();
-					nameList.add(parentPath);
+					pathList.add(parentPath);
 					data.add(photo);
 					hashMap.put(name, data);
 				}
