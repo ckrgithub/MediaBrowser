@@ -20,8 +20,8 @@ import com.ckr.mediabrowser.R;
 import com.ckr.mediabrowser.model.IMediaStore;
 import com.ckr.mediabrowser.model.photo.bean.Photo;
 import com.ckr.mediabrowser.observer.MediaObserver;
-import com.ckr.mediabrowser.presenter.photo.PhotoPresenter;
-import com.ckr.mediabrowser.presenter.photo.PhotoPresenterImpl;
+import com.ckr.mediabrowser.presenter.photo.PAVPresenter;
+import com.ckr.mediabrowser.presenter.photo.PAVPresenterImpl;
 import com.ckr.mediabrowser.util.PermissionRequest;
 import com.ckr.mediabrowser.view.BaseFragment;
 import com.ckr.mediabrowser.widget.MyFragmentPagerAdapter;
@@ -37,7 +37,7 @@ import static com.ckr.mediabrowser.util.MediaLog.Logd;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageChangeListener, LoaderManager.LoaderCallbacks<Cursor>, PhotoView<Photo> {
+public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageChangeListener, LoaderManager.LoaderCallbacks<Cursor>, MediaView<Photo> {
 	private static final String TAG = "PhotoMainFragment";
 
 	@BindView(R.id.tabLayout)
@@ -48,7 +48,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	String[] tabTitles;
 	private BaseFragment[] fragments;
 	private boolean isVisible = false;
-	private PhotoPresenter mPhotoPresenter;
+	private PAVPresenter mPhotoPresenter;
 	private Cursor mCursor;
 	private boolean isResume;
 	private Dialog mLoadingDialog;
@@ -65,7 +65,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 		Logd(TAG, "init: ");
 		initTabLayout();
 		mMediaObserver = MediaObserver.getInstance();
-		new PhotoPresenterImpl(this);
+		new PAVPresenterImpl(this);
 		if (isVisible) {
 			if (PermissionRequest.requestPermission(this, PermissionRequest.PERMISSION_STORAGE, PermissionRequest.REQUEST_STORAGE)) {
 				onPermissionGranted();
@@ -163,7 +163,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	}
 
 	@Override
-	public void setPresenter(PhotoPresenter photoPresenter) {
+	public void setPresenter(PAVPresenter photoPresenter) {
 		mPhotoPresenter = photoPresenter;
 	}
 
@@ -181,8 +181,8 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	}
 
 	@Override
-	public void updatePhoto(List<Photo> list) {
-		Logd(TAG, "updatePhoto: " + list.size());
+	public void updateMedia(List<Photo> list) {
+		Logd(TAG, "updateMedia: " + list.size());
 		if (list.size() == 0) {
 			return;
 		}

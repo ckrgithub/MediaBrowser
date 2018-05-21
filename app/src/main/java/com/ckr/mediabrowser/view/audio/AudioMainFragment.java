@@ -1,7 +1,6 @@
 package com.ckr.mediabrowser.view.audio;
 
 
-import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -31,15 +30,6 @@ public class AudioMainFragment extends BaseFragment implements ViewPager.OnPageC
 	String[] tabTitles;
 	private BaseFragment[] fragments;
 	private boolean isVisible=false;
-
-	public static AudioMainFragment newInstance() {
-
-		Bundle args = new Bundle();
-
-		AudioMainFragment fragment = new AudioMainFragment();
-		fragment.setArguments(args);
-		return fragment;
-	}
 
 	@Override
 	protected int getLayoutId() {

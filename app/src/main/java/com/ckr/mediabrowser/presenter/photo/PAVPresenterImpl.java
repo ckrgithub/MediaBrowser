@@ -7,7 +7,7 @@ import com.ckr.mediabrowser.model.MediaItem;
 import com.ckr.mediabrowser.model.photo.PhotoModel;
 import com.ckr.mediabrowser.model.photo.PhotoModelImpl;
 import com.ckr.mediabrowser.presenter.OnDataLoadListener;
-import com.ckr.mediabrowser.view.photo.PhotoView;
+import com.ckr.mediabrowser.view.photo.MediaView;
 
 import java.util.List;
 
@@ -15,12 +15,12 @@ import java.util.List;
  * Created by PC大佬 on 2018/5/19.
  */
 
-public class PhotoPresenterImpl implements PhotoPresenter, OnDataLoadListener<MediaItem> {
+public class PAVPresenterImpl implements PAVPresenter, OnDataLoadListener<MediaItem> {
 
-	private PhotoView mPhotoView;
+	private MediaView mPhotoView;
 	private PhotoModel mPhotoModel;
 
-	public PhotoPresenterImpl(@NonNull PhotoView view) {
+	public PAVPresenterImpl(@NonNull MediaView view) {
 		mPhotoView = view;
 		mPhotoView.setPresenter(this);
 		mPhotoModel = new PhotoModelImpl(this);
@@ -71,7 +71,7 @@ public class PhotoPresenterImpl implements PhotoPresenter, OnDataLoadListener<Me
 	@Override
 	public void onSuccess(List<? extends MediaItem> list) {
 		if (mPhotoView != null) {
-			mPhotoView.updatePhoto(list);
+			mPhotoView.updateMedia(list);
 		}
 	}
 
