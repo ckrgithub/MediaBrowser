@@ -53,7 +53,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	private boolean isResume;
 	private Dialog mLoadingDialog;
 	private MediaObserver mMediaObserver;
-	private boolean isRefresh = false;
+	private boolean isDelayLoad = false;
 
 	@Override
 	protected int getLayoutId() {
@@ -89,8 +89,14 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	@Override
 	public void onResume() {
 		super.onResume();
-		Logd(TAG, "onResume: ");
+		Logd(TAG, "onResume: isDelayLoad:"+isDelayLoad);
 		isResume = true;
+		if (isDelayLoad) {
+			isDelayLoad=false;
+			if (mPhotoPresenter != null) {
+				mPhotoPresenter.loadMedia(mCursor, IMediaStore.MEDIA_CONFIG[IMediaStore.MEDIA_TYPE_PHOTO]);
+			}
+		}
 	}
 
 	@Override
@@ -114,9 +120,6 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	@Override
 	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 		Logd(TAG, "onPageScrolled: position:" + position);
-		if (!isRefresh) {
-			isRefresh = true;
-		}
 	}
 
 	@Override
@@ -126,7 +129,6 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 
 	@Override
 	public void onPageScrollStateChanged(int state) {
-
 	}
 
 	@NonNull
@@ -150,6 +152,8 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 			if (mPhotoPresenter != null) {
 				mPhotoPresenter.loadMedia(cursor, IMediaStore.MEDIA_CONFIG[IMediaStore.MEDIA_TYPE_PHOTO]);
 			}
+		} else {
+			isDelayLoad = true;
 		}
 	}
 
@@ -178,7 +182,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 
 	@Override
 	public void updatePhoto(List<Photo> list) {
-		Logd(TAG, "updatePhoto: "+list.size());
+		Logd(TAG, "updatePhoto: " + list.size());
 		if (list.size() == 0) {
 			return;
 		}

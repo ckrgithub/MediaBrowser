@@ -3,7 +3,6 @@ package com.ckr.mediabrowser.view.photo;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -46,15 +45,6 @@ public class PhotoFragment extends BaseFragment implements OnMediaListener<Photo
 	private static final int COLUMN = 4;
 	private GridAdapter adapter;
 	private Activity activity;
-
-	public static PhotoFragment newInstance() {
-
-		Bundle args = new Bundle();
-
-		PhotoFragment fragment = new PhotoFragment();
-		fragment.setArguments(args);
-		return fragment;
-	}
 
 	@Override
 	public void onAttach(Context context) {
