@@ -71,10 +71,12 @@ public class AlbumFragment extends BaseFragment implements OnMediaListener<Photo
 
 	private void initView() {
 		int dimension = (int) getContext().getResources().getDimension(R.dimen.padding);
-		recyclerView.setPadding(dimension,0,dimension,0);
+		recyclerView.setPadding(dimension, 0, dimension, 0);
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 		DividerLinearItemDecoration.Builder builder = new DividerLinearItemDecoration.Builder(getContext());
-		builder.setDivider(R.drawable.bg_divider_linear);
+		builder.setDivider(R.drawable.bg_divider_linear)
+				.removeFooterDivider(true)
+				.removeHeaderDivider(true);
 		recyclerView.addItemDecoration(builder.build());
 		adapter = new LinearAdapter(this);
 		recyclerView.setAdapter(adapter);

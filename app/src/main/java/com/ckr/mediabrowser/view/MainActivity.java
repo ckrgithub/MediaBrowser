@@ -16,8 +16,9 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 import static com.ckr.mediabrowser.util.MediaLog.Logd;
+import static com.ckr.mediabrowser.util.MediaLog.Loge;
 
-public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener,MediaContext {
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, MediaContext {
 	private static final String TAG = "MainActivity";
 
 	@BindView(R.id.viewPager)
@@ -60,12 +61,13 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
 	@Override
 	public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-		Logd(TAG, "onPageScrolled: position:"+position);
+		Logd(TAG, "onPageScrolled: position:" + position + ",offset:" + positionOffset + ",pixels:" + positionOffsetPixels);
 	}
 
 	@Override
 	public void onPageSelected(int position) {
-		Logd(TAG, "onPageSelected: position:"+position);
+		Loge(TAG, "onPageSelected: position:" + position);
+		fragments[position].refreshFragment();
 	}
 
 	@Override
