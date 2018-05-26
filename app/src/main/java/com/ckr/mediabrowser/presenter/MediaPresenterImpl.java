@@ -12,11 +12,14 @@ import com.ckr.mediabrowser.view.MediaView;
 
 import java.util.List;
 
+import static com.ckr.mediabrowser.util.MediaLog.Logd;
+
 /**
  * Created by PC大佬 on 2018/5/19.
  */
 
 public class MediaPresenterImpl implements MediaPresenter, OnDataLoadListener<MediaItem> {
+	private static final String TAG = "MediaPresenterImpl";
 
 	private MediaView mMediaView;
 	private MediaModel mMediaModel;
@@ -34,10 +37,11 @@ public class MediaPresenterImpl implements MediaPresenter, OnDataLoadListener<Me
 
 	@Override
 	public void loadMedia(Cursor cursor, String[] mediaTable) {
-		if (null != cursor && mCursor == cursor) {
+		if (null == cursor|| mCursor == cursor) {
 			return;
 		}
 		mCursor = cursor;
+		Logd(TAG, "loadMedia:  cursor:"+cursor);
 		mMediaModel.loadMedia(cursor, mediaTable);
 	}
 

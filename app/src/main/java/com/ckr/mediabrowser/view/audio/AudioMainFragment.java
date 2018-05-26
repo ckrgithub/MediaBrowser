@@ -68,10 +68,14 @@ public class AudioMainFragment extends BaseFragment implements ViewPager.OnPageC
 		Logd(TAG, "init: ");
 		initTabLayout();
 		mMediaObserver = MediaObserver.getInstance();
-		new MediaPresenterImpl(this, IMediaStore.MEDIA_TYPE_PHOTO);
+		new MediaPresenterImpl(this, IMediaStore.MEDIA_TYPE_AUDIO);
 		if (isVisible) {
 			if (PermissionRequest.requestPermission(this, PermissionRequest.PERMISSION_STORAGE, PermissionRequest.REQUEST_STORAGE)) {
-				onPermissionGranted();
+				onPermissionGranted(PermissionRequest.REQUEST_STORAGE);
+			}
+		}else {
+			if (PermissionRequest.hasPermissionGranted(getContext(),PermissionRequest.PERMISSION_STORAGE)) {
+				onPermissionGranted(PermissionRequest.REQUEST_STORAGE);
 			}
 		}
 	}
@@ -84,7 +88,7 @@ public class AudioMainFragment extends BaseFragment implements ViewPager.OnPageC
 	}
 
 	@Override
-	public void onPermissionGranted() {
+	public void onPermissionGranted(int requestCode) {
 		Logd(TAG, "onPermissionGranted: ");
 		getActivity().getSupportLoaderManager().initLoader(IMediaStore.MEDIA_TYPE_AUDIO, null, this);
 	}
@@ -124,7 +128,7 @@ public class AudioMainFragment extends BaseFragment implements ViewPager.OnPageC
 
 	@Override
 	public void refreshFragment() {
-		Logd(TAG, "refreshFragment: isVisible" + isVisible);
+		Logd(TAG, "refreshFragment: isVisible" + isVisible+",mMediaPresenter:"+mMediaPresenter);
 		if (isVisible) {
 			mMediaPresenter.loadMedia(mCursor, MEDIA_TABLE[MEDIA_TYPE_AUDIO]);
 		}

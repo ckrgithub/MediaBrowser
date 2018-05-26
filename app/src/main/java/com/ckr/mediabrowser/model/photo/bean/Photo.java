@@ -7,6 +7,8 @@ import com.ckr.mediabrowser.model.MediaItem;
  */
 
 public class Photo extends MediaItem {
+	private String width;
+	private String height;
 	private String description;
 	private int isPrivate;
 	private double latitude;
@@ -23,6 +25,22 @@ public class Photo extends MediaItem {
 
 	public Photo() {
 		super();
+	}
+
+	public String getWidth() {
+		return width;
+	}
+
+	public void setWidth(String width) {
+		this.width = width;
+	}
+
+	public String getHeight() {
+		return height;
+	}
+
+	public void setHeight(String height) {
+		this.height = height;
 	}
 
 	public String getDescription() {

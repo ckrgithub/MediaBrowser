@@ -43,8 +43,6 @@ public interface IMediaStore {
 					android.provider.MediaStore.Video.Media.DATE_ADDED,
 					android.provider.MediaStore.Video.Media.DATE_MODIFIED,
 					android.provider.MediaStore.Video.Media.MIME_TYPE,
-					android.provider.MediaStore.Video.Media.WIDTH,
-					android.provider.MediaStore.Video.Media.HEIGHT,
 
 					android.provider.MediaStore.Audio.Media.DURATION,
 					android.provider.MediaStore.Audio.Media.ARTIST_ID,

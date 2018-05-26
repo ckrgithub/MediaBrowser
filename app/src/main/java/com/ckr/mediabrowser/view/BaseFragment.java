@@ -98,7 +98,7 @@ public abstract class BaseFragment extends Fragment implements PermissionRequest
 		Logd(TAG, "onActivityResult: requestCode:" + requestCode + ",resultCode:" + resultCode);
 		if (requestCode == REQUEST_SETTING_CODE) {
 			if (PermissionRequest.requestPermission(this, PermissionRequest.PERMISSION_STORAGE, PermissionRequest.REQUEST_STORAGE)) {
-				onPermissionGranted();
+				onPermissionGranted(PermissionRequest.REQUEST_STORAGE);
 			} else {
 				ToastUtils.toast(message);
 			}
@@ -110,14 +110,14 @@ public abstract class BaseFragment extends Fragment implements PermissionRequest
 		switch (requestCode) {
 			case PermissionRequest.REQUEST_STORAGE:
 				if (PermissionRequest.isPermissionGranted(this, permissions, grantResults)) {
-					onPermissionGranted();
+					onPermissionGranted(PermissionRequest.REQUEST_STORAGE);
 				}
 				break;
 		}
 	}
 
 	@Override
-	public void onPermissionGranted() {
+	public void onPermissionGranted(int requestCode) {
 		Logd(TAG, "onPermissionGranted: ");
 	}
 

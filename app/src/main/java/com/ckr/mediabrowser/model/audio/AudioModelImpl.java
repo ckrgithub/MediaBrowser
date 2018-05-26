@@ -98,20 +98,18 @@ public class AudioModelImpl implements MediaModel {
 				final long dateAdded = cursor.getLong(cursor.getColumnIndex(mediaTable[5]));
 				final long dateModified = cursor.getLong(cursor.getColumnIndex(mediaTable[6]));
 				final String mimeType = cursor.getString(cursor.getColumnIndex(mediaTable[7]));
-				final String width = cursor.getString(cursor.getColumnIndex(mediaTable[8]));
-				final String height = cursor.getString(cursor.getColumnIndex(mediaTable[9]));
 
-				final long duration = cursor.getLong(cursor.getColumnIndex(mediaTable[10]));
-				final long artistId = cursor.getLong(cursor.getColumnIndex(mediaTable[11]));
-				final String artist = cursor.getString(cursor.getColumnIndex(mediaTable[12]));
-				final long albumId = cursor.getLong(cursor.getColumnIndex(mediaTable[13]));
-				final String album = cursor.getString(cursor.getColumnIndex(mediaTable[14]));
-				final int year = cursor.getInt(cursor.getColumnIndex(mediaTable[15]));
-				final int isMusic = cursor.getInt(cursor.getColumnIndex(mediaTable[16]));
-				final int isPodcast = cursor.getInt(cursor.getColumnIndex(mediaTable[17]));
-				final int isRingtone = cursor.getInt(cursor.getColumnIndex(mediaTable[18]));
-				final int isAlarm = cursor.getInt(cursor.getColumnIndex(mediaTable[19]));
-				final int isNotification = cursor.getInt(cursor.getColumnIndex(mediaTable[20]));
+				final long duration = cursor.getLong(cursor.getColumnIndex(mediaTable[8]));
+				final long artistId = cursor.getLong(cursor.getColumnIndex(mediaTable[9]));
+				final String artist = cursor.getString(cursor.getColumnIndex(mediaTable[10]));
+				final long albumId = cursor.getLong(cursor.getColumnIndex(mediaTable[11]));
+				final String album = cursor.getString(cursor.getColumnIndex(mediaTable[12]));
+				final int year = cursor.getInt(cursor.getColumnIndex(mediaTable[13]));
+				final int isMusic = cursor.getInt(cursor.getColumnIndex(mediaTable[14]));
+				final int isPodcast = cursor.getInt(cursor.getColumnIndex(mediaTable[15]));
+				final int isRingtone = cursor.getInt(cursor.getColumnIndex(mediaTable[16]));
+				final int isAlarm = cursor.getInt(cursor.getColumnIndex(mediaTable[17]));
+				final int isNotification = cursor.getInt(cursor.getColumnIndex(mediaTable[18]));
 				Logd(TAG, "queryData: id:" + id);
 				Loge(TAG, "queryData: path:" + path);
 				Logd(TAG, "queryData: fileSize:" + fileSize);
@@ -120,9 +118,7 @@ public class AudioModelImpl implements MediaModel {
 				Logd(TAG, "queryData: dateAdded:" + dateAdded);
 				Logd(TAG, "queryData: dateModified:" + dateModified);
 				Logd(TAG, "queryData: mimeType:" + mimeType);
-				Logd(TAG, "queryData: width:" + width);
-				Logd(TAG, "queryData: height:" + height);
-				
+
 				Logd(TAG, "queryData: duration:" + duration);
 				Logd(TAG, "queryData: artistId:" + artistId);
 				Logd(TAG, "queryData: artist:" + artist);

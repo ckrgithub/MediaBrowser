@@ -1,6 +1,7 @@
 package com.ckr.mediabrowser.util;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
@@ -38,6 +39,20 @@ public class PermissionRequest {
 	public static final String[] PERMISSION_CAMERA = {CAMERA};
 	public static final String[] PERMISSION_RECORD = {RECORD_AUDIO};
 	public static final String[] PERMISSION_PHONE = {READ_PHONE_STATE, CALL_PHONE};
+
+	public static boolean hasPermissionGranted(@NonNull final Context context, @NonNull String[] group) {
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+			return true;
+		}
+		boolean isGranted = true;
+		for (String s : group) {
+			if (context.checkSelfPermission(s) != PackageManager.PERMISSION_GRANTED) {
+				isGranted = false;
+				break;
+			}
+		}
+		return isGranted;
+	}
 
 	public static boolean requestPermission(@NonNull final Activity activity, @NonNull String[] group, int requestCode) {
 		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -165,7 +180,7 @@ public class PermissionRequest {
 
 	public interface PermissionListener {
 
-		void onPermissionGranted();
+		void onPermissionGranted(int requestCode);
 
 		void onPermissionPermanentlyDenied();
 

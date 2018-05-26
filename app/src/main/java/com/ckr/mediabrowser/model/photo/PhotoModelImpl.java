@@ -131,13 +131,15 @@ public class PhotoModelImpl implements MediaModel {
 				Logd(TAG, "queryData: thumbMagic:" + thumbMagic);
 				Logd(TAG, "queryData: bucketId:" + bucketId);
 				Logd(TAG, "queryData: bucketDisplayName:" + bucketDisplayName);
-				String addedDate = getDate(dateAdded*1000);
-				String modifiedDate = getDate(dateModified*1000);
+				String addedDate = getDate(dateAdded * 1000);
+				String modifiedDate = getDate(dateModified * 1000);
 				String takenDate = getDate(dateTaken);
 				Logd(TAG, "queryData: addedDate:" + addedDate);
 				Logd(TAG, "queryData: modifiedDate:" + modifiedDate);
 				Logd(TAG, "queryData: takenDate:" + takenDate);
 				Photo photo = new Photo(path, fileSize, displayName, title, addedDate, modifiedDate, mimeType, id);
+				photo.setWidth(width);
+				photo.setHeight(height);
 				photo.setDescription(description);
 				photo.setPrivate(isPrivate);
 				photo.setLatitude(latitude);
