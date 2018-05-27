@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.ckr.mediabrowser.R;
 import com.ckr.mediabrowser.model.Album;
+import com.ckr.mediabrowser.model.IMediaStore;
 import com.ckr.mediabrowser.model.MediaItem;
 import com.ckr.mediabrowser.util.GlideUtil;
 import com.ckr.mediabrowser.view.MediaContext;
@@ -23,10 +24,16 @@ public class LinearAdapter extends BaseAdapter<Album, LinearAdapter.AlbumHolder>
 	private static final String TAG = "GridAdapter";
 
 	private MediaContext context;
+	private String formatString;
 
-	public LinearAdapter(@NonNull MediaContext context) {
+	public LinearAdapter(@NonNull MediaContext context, int mediaType) {
 		super(context.getContext());
 		this.context = context;
+		if (mediaType == IMediaStore.MEDIA_TYPE_PHOTO) {
+			formatString = mContext.getString(R.string.album_sum);
+		}else if (mediaType == IMediaStore.MEDIA_TYPE_AUDIO) {
+			formatString = mContext.getString(R.string.audio_sum);
+		}
 	}
 
 	@Override
@@ -41,10 +48,10 @@ public class LinearAdapter extends BaseAdapter<Album, LinearAdapter.AlbumHolder>
 
 	@Override
 	protected void convert(AlbumHolder holder, int position, Album album) {
-		String string = mContext.getString(R.string.album_sum);
+
 		List<? extends MediaItem> list = album.getList();
 		holder.tvName.setText(album.getName());
-		holder.tvSum.setText(String.format(string, list.size()));
+		holder.tvSum.setText(String.format(formatString, list.size()));
 		MediaItem mediaItem = list.get(0);
 		String path = mediaItem.getPath();
 		Logd(TAG, "convert: path:" + path);

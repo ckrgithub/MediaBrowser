@@ -78,7 +78,7 @@ public class AlbumFragment extends BaseFragment implements OnMediaListener<Photo
 				.removeFooterDivider(true)
 				.removeHeaderDivider(true);
 		recyclerView.addItemDecoration(builder.build());
-		adapter = new LinearAdapter(this);
+		adapter = new LinearAdapter(this,IMediaStore.MEDIA_TYPE_PHOTO);
 		recyclerView.setAdapter(adapter);
 		recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 			@Override
