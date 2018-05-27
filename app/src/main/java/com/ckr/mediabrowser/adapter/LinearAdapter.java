@@ -33,6 +33,8 @@ public class LinearAdapter extends BaseAdapter<Album, LinearAdapter.AlbumHolder>
 			formatString = mContext.getString(R.string.album_sum);
 		}else if (mediaType == IMediaStore.MEDIA_TYPE_AUDIO) {
 			formatString = mContext.getString(R.string.audio_sum);
+		}else if (mediaType == IMediaStore.MEDIA_TYPE_VIDEO) {
+			formatString = mContext.getString(R.string.video_sum);
 		}
 	}
 

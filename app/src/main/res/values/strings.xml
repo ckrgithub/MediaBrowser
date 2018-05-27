@@ -40,4 +40,5 @@
 
     <string name="album_sum">共%1$d张相册</string>
     <string name="audio_sum">共%1$d首音乐</string>
+    <string name="video_sum">共%1$d个视频</string>
 </resources>
