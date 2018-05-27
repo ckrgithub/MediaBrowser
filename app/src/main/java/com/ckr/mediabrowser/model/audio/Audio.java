@@ -23,6 +23,10 @@ public class Audio extends MediaItem {
 		super(path, size, displayName, title, dateAdded, dateModified, mimeType, id);
 	}
 
+	public Audio() {
+		super();
+	}
+
 	public long getDuration() {
 		return duration;
 	}

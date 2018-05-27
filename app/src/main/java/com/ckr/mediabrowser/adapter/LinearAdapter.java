@@ -60,7 +60,7 @@ public class LinearAdapter extends BaseAdapter<Album, LinearAdapter.AlbumHolder>
 		public AlbumHolder(View itemView, int viewType) {
 			super(itemView);
 			tvName = itemView.findViewById(R.id.tv_name);
-			tvSum = itemView.findViewById(R.id.tv_sum);
+			tvSum = itemView.findViewById(R.id.tv_size);
 			imageView = itemView.findViewById(R.id.imageView);
 		}
 	}

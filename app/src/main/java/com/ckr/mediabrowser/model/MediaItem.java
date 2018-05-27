@@ -13,6 +13,7 @@ public abstract class MediaItem extends MediaLabel implements IMediaStore {
 	protected String dateAdded;
 	protected String dateModified;
 	protected String mimeType;
+	private String subMineType;
 	protected Long id;
 
 	public MediaItem(String path, long size, String displayName, String title, String dateAdded, String dateModified, String mimeType, Long id) {
@@ -24,6 +25,7 @@ public abstract class MediaItem extends MediaLabel implements IMediaStore {
 		this.dateAdded = dateAdded;
 		this.dateModified = dateModified;
 		this.mimeType = mimeType;
+		subMineType = mimeType.substring(mimeType.lastIndexOf("/") + 1, mimeType.length());
 		this.id = id;
 	}
 
@@ -61,6 +63,10 @@ public abstract class MediaItem extends MediaLabel implements IMediaStore {
 
 	public String getMimeType() {
 		return mimeType;
+	}
+
+	public String getSubMineType() {
+		return subMineType;
 	}
 
 	public Long getId() {

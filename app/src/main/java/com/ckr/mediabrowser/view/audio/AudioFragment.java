@@ -1,29 +1,56 @@
 package com.ckr.mediabrowser.view.audio;
 
 
-import android.os.Bundle;
+import android.app.Activity;
+import android.content.Context;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 
+import com.bumptech.glide.Glide;
+import com.ckr.decoration.DividerLinearItemDecoration;
 import com.ckr.mediabrowser.R;
+import com.ckr.mediabrowser.adapter.GridAdapter;
+import com.ckr.mediabrowser.model.IMediaStore;
+import com.ckr.mediabrowser.model.MediaItem;
+import com.ckr.mediabrowser.model.audio.Audio;
+import com.ckr.mediabrowser.observer.MediaObserver;
+import com.ckr.mediabrowser.observer.OnMediaListener;
 import com.ckr.mediabrowser.view.BaseFragment;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import butterknife.BindView;
+
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_DRAGGING;
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_SETTLING;
 import static com.ckr.mediabrowser.util.MediaLog.Logd;
+import static com.ckr.mediabrowser.util.MediaLog.Loge;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AudioFragment extends BaseFragment {
+public class AudioFragment extends BaseFragment implements OnMediaListener<Audio> {
 	private static final String TAG = "AudioFragment";
+	@BindView(R.id.recyclerView)
+	RecyclerView recyclerView;
 	private boolean isVisible = false;
+	private MediaObserver mMediaObserver;
+	private List<MediaItem> targetList;
+	private List<Audio> srcList;
+	private static final int COLUMN = 5;
+	private GridAdapter adapter;
+	private Activity activity;
 
-	public static AudioFragment newInstance() {
-
-		Bundle args = new Bundle();
-
-		AudioFragment fragment = new AudioFragment();
-		fragment.setArguments(args);
-		return fragment;
+	@Override
+	public void onAttach(Context context) {
+		super.onAttach(context);
+		activity = (Activity) context;
 	}
 
 	@Override
@@ -34,8 +61,36 @@ public class AudioFragment extends BaseFragment {
 	@Override
 	protected void init() {
 		Logd(TAG, "init: ");
+		targetList = new ArrayList<>();
+		srcList = new ArrayList<>();
+		initView();
+		mMediaObserver = MediaObserver.getInstance();
+		mMediaObserver.registerListener(this);
 	}
-
+	private void initView() {
+		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+		DividerLinearItemDecoration.Builder builder = new DividerLinearItemDecoration.Builder(getContext());
+		builder.setDivider(R.drawable.bg_divider_linear);
+		recyclerView.addItemDecoration(builder.build());
+		adapter = new GridAdapter(this, COLUMN);
+		recyclerView.setAdapter(adapter);
+		recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+			@Override
+			public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+				switch (newState) {
+					case SCROLL_STATE_SETTLING:
+						Glide.with(AudioFragment.this).pauseRequests();
+						break;
+					case SCROLL_STATE_IDLE:
+						Glide.with(AudioFragment.this).resumeRequests();
+						break;
+					case SCROLL_STATE_DRAGGING:
+						Glide.with(AudioFragment.this).resumeRequests();
+						break;
+				}
+			}
+		});
+	}
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -59,4 +114,56 @@ public class AudioFragment extends BaseFragment {
 
 	}
 
+	@Override
+	public void subscribeOn(List<Audio> list, int mediaType) {
+		Logd(TAG, "subscribeOn: mediaType:" + mediaType);
+		if (mediaType != IMediaStore.MEDIA_TYPE_AUDIO) {
+			return;
+		}
+		synchronized (this) {
+			handleData(list);
+		}
+	}
+
+	private final Map<String, Integer> hashMap = new HashMap<String, Integer>();
+
+	private void handleData(List<Audio> list) {
+		if (list.size() > 0) {
+			hashMap.clear();
+			targetList.clear();
+			srcList.clear();
+			srcList.addAll(list);
+			int size = srcList.size();
+			for (int i = 0; i < size; i++) {
+				Audio photo = srcList.get(i);
+				String dateTaken = photo.getSubMineType();
+				if (hashMap.containsKey(dateTaken)) {
+					Logd(TAG, "handleData: 已添加日期:" + dateTaken);
+				} else {
+					Loge(TAG, "handleData: 未添加日期:" + dateTaken);
+					hashMap.put(dateTaken, i);
+					MediaItem label = new Audio();
+					label.setLabel(true);
+					label.setLabelText(dateTaken);
+					targetList.add(targetList.size(), label);
+				}
+				targetList.add(photo);
+			}
+			Logd(TAG, "handleData: size:" + size + ",:" + activity);
+			if (activity != null) {
+				activity.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						Logd(TAG, "run: size:" + targetList.size());
+						adapter.updateAll(targetList);
+					}
+				});
+			}
+		}
+	}
+
+	@Override
+	public void subscribeOnFile(Map<String, List<Audio>> map, int mediaType) {
+
+	}
 }

@@ -2,7 +2,9 @@ package com.ckr.mediabrowser.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -57,10 +59,12 @@ public class GridAdapter extends BaseAdapter<MediaItem, GridAdapter.MediaItemHol
 
 	@Override
 	protected int getLayoutId(int viewType) {
-		if (viewType == MEDIA_TYPE_PHOTO) {
+		if (viewType == MEDIA_TYPE_NONE) {
+			return R.layout.item_label;
+		}else if (viewType == MEDIA_TYPE_PHOTO) {
 			return R.layout.item_grid;
 		}
-		return R.layout.item_label;
+		return R.layout.item_grid_2;
 	}
 
 	@Override
@@ -72,18 +76,55 @@ public class GridAdapter extends BaseAdapter<MediaItem, GridAdapter.MediaItemHol
 	protected void convert(MediaItemHolder holder, int position, MediaItem mediaItem) {
 		int itemViewType = getItemViewType(position);
 		if (itemViewType == MEDIA_TYPE_NONE) {
+			int mediaType = mediaItem.getMediaType();
+			if (mediaType!=MEDIA_TYPE_PHOTO) {
+				holder.labelView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.bg_label));
+			}
 			holder.labelView.setText(mediaItem.getLabelText());
 		} else if (itemViewType == MEDIA_TYPE_PHOTO) {
 			String path = mediaItem.getPath();
 			Logd(TAG, "convert: path:" + path);
 			GlideUtil.loadImageByPath(context, holder.imageView, path);
+		}else {
+			String path = mediaItem.getPath();
+			Logd(TAG, "convert: path:" + path);
+			GlideUtil.loadImageByPath(context, holder.imageView, path);
+			holder.tvName.setText(mediaItem.getDisplayName());
+			long size = mediaItem.getSize();
+			String sizeString = convertSize(size);
+			holder.tvSize.setText(sizeString);
+			holder.tvDate.setText(mediaItem.getDateModified());
 		}
+	}
+
+	@NonNull
+	private String convertSize(long size) {
+		int kb = (int) (size / 1024);
+		Logd(TAG, "convertSize: kb:" + kb);
+		String sizeString = "";
+		if (kb < 1) {
+			sizeString = size + "B";
+		} else {
+			int mb = (kb / 1024);
+			Log.d(TAG, "convertSize: mb:" + mb);
+			if (mb > 0) {
+				int k = (int) (kb % 1024 / 10.24f);
+				Logd(TAG, "convertSize: 小数点:" + k);
+				sizeString = mb + "." + k + "MB";
+			} else {
+				sizeString = kb + "KB";
+			}
+		}
+		return sizeString;
 	}
 
 	class MediaItemHolder extends BaseViewHolder {
 
 		private TextView labelView;
 		private ImageView imageView;
+		private TextView tvName;
+		private TextView tvSize;
+		private TextView tvDate;
 
 		public MediaItemHolder(View itemView, int viewType) {
 			super(itemView);
@@ -94,6 +135,15 @@ public class GridAdapter extends BaseAdapter<MediaItem, GridAdapter.MediaItemHol
 				ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
 				layoutParams.height = imageHeight;
 				imageView.setLayoutParams(layoutParams);
+			}else {
+				imageView = itemView.findViewById(R.id.imageView);
+				ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
+				layoutParams.height = imageHeight;
+				layoutParams.width = imageHeight;
+				imageView.setLayoutParams(layoutParams);
+				tvName = itemView.findViewById(R.id.tv_name);
+				tvSize = itemView.findViewById(R.id.tv_size);
+				tvDate = itemView.findViewById(R.id.tv_date);
 			}
 		}
 	}
