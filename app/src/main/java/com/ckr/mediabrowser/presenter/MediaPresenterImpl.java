@@ -8,6 +8,7 @@ import com.ckr.mediabrowser.model.MediaItem;
 import com.ckr.mediabrowser.model.MediaModel;
 import com.ckr.mediabrowser.model.audio.AudioModelImpl;
 import com.ckr.mediabrowser.model.photo.PhotoModelImpl;
+import com.ckr.mediabrowser.model.video.VideoModelImpl;
 import com.ckr.mediabrowser.view.MediaView;
 
 import java.util.List;
@@ -32,6 +33,10 @@ public class MediaPresenterImpl implements MediaPresenter, OnDataLoadListener<Me
 			mMediaModel = new PhotoModelImpl(this);
 		} else if (mediaType == IMediaStore.MEDIA_TYPE_AUDIO) {
 			mMediaModel = new AudioModelImpl(this);
+		}else if (mediaType == IMediaStore.MEDIA_TYPE_VIDEO) {
+			mMediaModel = new VideoModelImpl(this);
+		}else if (mediaType == IMediaStore.MEDIA_TYPE_FILE) {
+//			mMediaModel = new AudioModelImpl(this);
 		}
 	}
 

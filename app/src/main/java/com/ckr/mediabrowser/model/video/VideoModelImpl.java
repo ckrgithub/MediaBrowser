@@ -1,4 +1,4 @@
-package com.ckr.mediabrowser.model.photo;
+package com.ckr.mediabrowser.model.video;
 
 import android.database.Cursor;
 import android.os.Handler;
@@ -6,7 +6,6 @@ import android.os.Looper;
 import android.support.annotation.NonNull;
 
 import com.ckr.mediabrowser.model.MediaModel;
-import com.ckr.mediabrowser.model.photo.bean.Photo;
 import com.ckr.mediabrowser.presenter.OnDataLoadListener;
 
 import java.io.File;
@@ -26,15 +25,15 @@ import static com.ckr.mediabrowser.util.MediaLog.Loge;
  * Created by PC大佬 on 2018/5/19.
  */
 
-public class PhotoModelImpl implements MediaModel {
-	private static final String TAG = "PhotoModelImpl";
+public class VideoModelImpl implements MediaModel {
+	private static final String TAG = "VideoModelImpl";
 	private static final int MINIMUM_SIZE = 5 * 1024;
 	private OnDataLoadListener mOnDataLoadListener;
 	private ExecutorService mExecutor;
 	private Future<?> future;
 	private final Handler mHandler = new Handler(Looper.myLooper());
 
-	public PhotoModelImpl(@NonNull OnDataLoadListener listener) {
+	public VideoModelImpl(@NonNull OnDataLoadListener listener) {
 		mOnDataLoadListener = listener;
 	}
 
@@ -51,19 +50,19 @@ public class PhotoModelImpl implements MediaModel {
 			Logd(TAG, "loadMedia: cancel:" + cancel);
 		}
 		mOnDataLoadListener.showLoadingDialog();
-		future = mExecutor.submit(new PhotoRunnable(cursor, mediaTable));
+		future = mExecutor.submit(new VideoRunnable(cursor, mediaTable));
 	}
 
 	@Override
 	public void onDestroy() {
 	}
 
-	private final class PhotoRunnable implements Runnable {
+	private final class VideoRunnable implements Runnable {
 
 		private Cursor cursor;
 		private String[] mediaTable;
 
-		public PhotoRunnable(Cursor cursor, String[] mediaTable) {
+		public VideoRunnable(Cursor cursor, String[] mediaTable) {
 			this.cursor = cursor;
 			this.mediaTable = mediaTable;
 		}
@@ -74,7 +73,7 @@ public class PhotoModelImpl implements MediaModel {
 		}
 	}
 
-	private List<Photo> data;
+	private List<Video> data;
 	SimpleDateFormat simpleFormatter = new SimpleDateFormat("yyyy年MM月dd日");
 
 	private void queryData(Cursor cursor, String[] mediaTable) {
@@ -102,15 +101,18 @@ public class PhotoModelImpl implements MediaModel {
 				final String width = cursor.getString(cursor.getColumnIndex(mediaTable[8]));
 				final String height = cursor.getString(cursor.getColumnIndex(mediaTable[9]));
 
-				final String description = cursor.getString(cursor.getColumnIndex(mediaTable[10]));
-				final int isPrivate = cursor.getInt(cursor.getColumnIndex(mediaTable[11]));
-				final double latitude = cursor.getInt(cursor.getColumnIndex(mediaTable[12]));
-				final double longitude = cursor.getInt(cursor.getColumnIndex(mediaTable[13]));
-				final long dateTaken = cursor.getLong(cursor.getColumnIndex(mediaTable[14]));
-				final int orientation = cursor.getInt(cursor.getColumnIndex(mediaTable[15]));
-				final int thumbMagic = cursor.getInt(cursor.getColumnIndex(mediaTable[16]));
-				final String bucketId = cursor.getString(cursor.getColumnIndex(mediaTable[17]));
-				final String bucketDisplayName = cursor.getString(cursor.getColumnIndex(mediaTable[18]));
+				final long duration = cursor.getLong(cursor.getColumnIndex(mediaTable[10]));
+				final String artist = cursor.getString(cursor.getColumnIndex(mediaTable[11]));
+				final String album = cursor.getString(cursor.getColumnIndex(mediaTable[12]));
+				final String resolution = cursor.getString(cursor.getColumnIndex(mediaTable[13]));
+				final String description = cursor.getString(cursor.getColumnIndex(mediaTable[14]));
+				final int isPrivate = cursor.getInt(cursor.getColumnIndex(mediaTable[15]));
+				final String language = cursor.getString(cursor.getColumnIndex(mediaTable[16]));
+				final double latitude = cursor.getInt(cursor.getColumnIndex(mediaTable[17]));
+				final double longitude = cursor.getInt(cursor.getColumnIndex(mediaTable[18]));
+				final long dateTaken = cursor.getLong(cursor.getColumnIndex(mediaTable[19]));
+				final String bucketId = cursor.getString(cursor.getColumnIndex(mediaTable[20]));
+				final String bucketDisplayName = cursor.getString(cursor.getColumnIndex(mediaTable[21]));
 				Logd(TAG, "queryData: id:" + id);
 				Loge(TAG, "queryData: path:" + path);
 				Logd(TAG, "queryData: fileSize:" + fileSize);
@@ -122,13 +124,16 @@ public class PhotoModelImpl implements MediaModel {
 				Logd(TAG, "queryData: width:" + width);
 				Logd(TAG, "queryData: height:" + height);
 
+				Logd(TAG, "queryData: duration:" + duration);
+				Logd(TAG, "queryData: artist:" + artist);
+				Logd(TAG, "queryData: album:" + album);
+				Logd(TAG, "queryData: resolution:" + resolution);
 				Logd(TAG, "queryData: description:" + description);
 				Logd(TAG, "queryData: isPrivate:" + isPrivate);
+				Logd(TAG, "queryData: language:" + language);
 				Logd(TAG, "queryData: latitude:" + latitude);
 				Logd(TAG, "queryData: longitude:" + longitude);
 				Logd(TAG, "queryData: dateTaken:" + dateTaken);
-				Logd(TAG, "queryData: orientation:" + orientation);
-				Logd(TAG, "queryData: thumbMagic:" + thumbMagic);
 				Logd(TAG, "queryData: bucketId:" + bucketId);
 				Logd(TAG, "queryData: bucketDisplayName:" + bucketDisplayName);
 				String addedDate = getDate(dateAdded * 1000);
@@ -137,19 +142,22 @@ public class PhotoModelImpl implements MediaModel {
 				Logd(TAG, "queryData: addedDate:" + addedDate);
 				Logd(TAG, "queryData: modifiedDate:" + modifiedDate);
 				Logd(TAG, "queryData: takenDate:" + takenDate);
-				Photo photo = new Photo(path, fileSize, displayName, title, addedDate, modifiedDate, mimeType, id);
-				photo.setWidth(width);
-				photo.setHeight(height);
-				photo.setDescription(description);
-				photo.setPrivate(isPrivate);
-				photo.setLatitude(latitude);
-				photo.setLongitude(longitude);
-				photo.setDateTaken(takenDate);
-				photo.setOrientation(orientation);
-				photo.setMiniThumbMagic(thumbMagic);
-				photo.setBucketId(bucketId);
-				photo.setBucketDisplayName(bucketDisplayName);
-				data.add(photo);
+				Video video = new Video(path, fileSize, displayName, title, addedDate, modifiedDate, mimeType, id);
+				video.setWidth(width);
+				video.setHeight(height);
+				video.setDuration(duration);
+				video.setArtist(artist);
+				video.setAlbum(album);
+				video.setResolution(resolution);
+				video.setDescription(description);
+				video.setPrivate(isPrivate);
+				video.setLanguage(language);
+				video.setLatitude(latitude);
+				video.setLongitude(longitude);
+				video.setDateTaken(takenDate);
+				video.setBucketId(bucketId);
+				video.setBucketDisplayName(bucketDisplayName);
+				data.add(video);
 			}
 		}
 		mHandler.post(new Runnable() {
@@ -164,14 +172,14 @@ public class PhotoModelImpl implements MediaModel {
 			mOnDataLoadListener.onSuccess(data);
 		}
 	}
-
+	
 	private String getDate(long date) {
 		String format = null;
 		try {
 			format = simpleFormatter.format(new Date(date));
 		} catch (Exception e) {
 			e.printStackTrace();
-			format = "1970年01月01日";
+			format = "1970年01月01日 00:00:00";
 		}
 		return format;
 	}

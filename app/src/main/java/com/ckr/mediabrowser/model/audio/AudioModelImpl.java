@@ -168,7 +168,7 @@ public class AudioModelImpl implements MediaModel {
 			format = simpleFormatter.format(new Date(date));
 		} catch (Exception e) {
 			e.printStackTrace();
-			format = "1970年01月01日 00:00:00";
+			format = "1970年01月01日";
 		}
 		return format;
 	}
