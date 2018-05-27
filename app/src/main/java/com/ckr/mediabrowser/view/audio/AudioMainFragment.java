@@ -33,8 +33,6 @@ import java.util.List;
 import butterknife.BindArray;
 import butterknife.BindView;
 
-import static com.ckr.mediabrowser.model.IMediaStore.MEDIA_TABLE;
-import static com.ckr.mediabrowser.model.IMediaStore.MEDIA_TYPE_AUDIO;
 import static com.ckr.mediabrowser.util.MediaLog.Logd;
 
 /**
@@ -50,14 +48,14 @@ public class AudioMainFragment extends BaseFragment implements ViewPager.OnPageC
 	@BindArray(R.array.tab_audio)
 	String[] tabTitles;
 	private BaseFragment[] fragments;
-	private boolean isVisible = false;
 	private MediaPresenter mMediaPresenter;
 	private Cursor mCursor;
-	private boolean isResume;
 	private Dialog mLoadingDialog;
 	private MediaObserver mMediaObserver;
-	private boolean isDelayLoad = false;
-	private boolean isNeedRefresh=false;
+	private boolean isResume = false;
+	private boolean isVisible = false;
+	private boolean hasCursorChanged = false;
+	private boolean isNeedRefresh = false;
 
 	@Override
 	protected int getLayoutId() {
@@ -74,8 +72,8 @@ public class AudioMainFragment extends BaseFragment implements ViewPager.OnPageC
 			if (PermissionRequest.requestPermission(this, PermissionRequest.PERMISSION_STORAGE, PermissionRequest.REQUEST_STORAGE)) {
 				onPermissionGranted(PermissionRequest.REQUEST_STORAGE);
 			}
-		}else {
-			if (PermissionRequest.hasPermissionGranted(getContext(),PermissionRequest.PERMISSION_STORAGE)) {
+		} else {
+			if (PermissionRequest.hasPermissionGranted(getContext(), PermissionRequest.PERMISSION_STORAGE)) {
 				onPermissionGranted(PermissionRequest.REQUEST_STORAGE);
 			}
 		}
@@ -100,12 +98,16 @@ public class AudioMainFragment extends BaseFragment implements ViewPager.OnPageC
 		Logd(TAG, "onResume: ");
 		isResume = true;
 		if (isVisible) {
-			if (isDelayLoad) {
-				isDelayLoad = false;
-				if (mMediaPresenter != null) {
-					mMediaPresenter.loadMedia(mCursor, IMediaStore.MEDIA_TABLE[IMediaStore.MEDIA_TYPE_AUDIO]);
-				}
+			if (hasCursorChanged) {
+				hasCursorChanged = false;
+				loadAudio();
 			}
+		}
+	}
+
+	private void loadAudio() {
+		if (mMediaPresenter != null) {
+			mMediaPresenter.loadMedia(mCursor, IMediaStore.MEDIA_TABLE[IMediaStore.MEDIA_TYPE_AUDIO]);
 		}
 	}
 
@@ -120,8 +122,8 @@ public class AudioMainFragment extends BaseFragment implements ViewPager.OnPageC
 		Logd(TAG, "onVisible: " + isVisible);
 		isVisible = true;
 		if (isNeedRefresh) {
-			isNeedRefresh=false;
-			mMediaPresenter.loadMedia(mCursor, MEDIA_TABLE[MEDIA_TYPE_AUDIO]);
+			isNeedRefresh = false;
+			loadAudio();
 		}
 	}
 
@@ -133,11 +135,11 @@ public class AudioMainFragment extends BaseFragment implements ViewPager.OnPageC
 
 	@Override
 	public void refreshFragment() {
-		Logd(TAG, "refreshFragment: isVisible:" + isVisible+",mMediaPresenter:"+mMediaPresenter);
+		Logd(TAG, "refreshFragment: isVisible:" + isVisible + ",mMediaPresenter:" + mMediaPresenter);
 		if (isVisible) {
-			mMediaPresenter.loadMedia(mCursor, MEDIA_TABLE[MEDIA_TYPE_AUDIO]);
-		}else {
-			isNeedRefresh=true;
+			loadAudio();
+		} else {
+			isNeedRefresh = true;
 		}
 	}
 
@@ -168,16 +170,14 @@ public class AudioMainFragment extends BaseFragment implements ViewPager.OnPageC
 	@Override
 	public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
 		Logd(TAG, "onLoadFinished: cursor:" + cursor + ",mCursor:" + mCursor);
-		if (mCursor == cursor) {//cursor没变，无需更新数据源
+		if (null == cursor || mCursor == cursor) {//cursor没变，无需更新数据源
 			return;
 		}
 		mCursor = cursor;
 		if (isVisible && isResume) {//fragment可见才更新数据源
-			if (mMediaPresenter != null) {
-				mMediaPresenter.loadMedia(cursor, IMediaStore.MEDIA_TABLE[IMediaStore.MEDIA_TYPE_AUDIO]);
-			}
+			loadAudio();
 		} else {
-			isDelayLoad = true;
+			hasCursorChanged = true;
 		}
 	}
 

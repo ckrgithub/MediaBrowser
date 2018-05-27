@@ -34,7 +34,6 @@ import butterknife.BindArray;
 import butterknife.BindView;
 
 import static com.ckr.mediabrowser.model.IMediaStore.MEDIA_TABLE;
-import static com.ckr.mediabrowser.model.IMediaStore.MEDIA_TYPE_PHOTO;
 import static com.ckr.mediabrowser.util.MediaLog.Logd;
 
 /**
@@ -42,7 +41,6 @@ import static com.ckr.mediabrowser.util.MediaLog.Logd;
  */
 public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageChangeListener, LoaderManager.LoaderCallbacks<Cursor>, MediaView<Photo> {
 	private static final String TAG = "PhotoMainFragment";
-
 	@BindView(R.id.tabLayout)
 	TabLayout tabLayout;
 	@BindView(R.id.myViewPager)
@@ -50,13 +48,13 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	@BindArray(R.array.tab_photo)
 	String[] tabTitles;
 	private BaseFragment[] fragments;
-	private boolean isVisible = false;
 	private MediaPresenter mMediaPresenter;
-	private Cursor mCursor;
-	private boolean isResume;
-	private Dialog mLoadingDialog;
 	private MediaObserver mMediaObserver;
-	private boolean isDelayLoad = false;
+	private Cursor mCursor;
+	private Dialog mLoadingDialog;
+	private boolean isResume = false;
+	private boolean isVisible = false;
+	private boolean hasCursorChanged = false;
 	private boolean isNeedRefresh = false;
 
 	@Override
@@ -97,15 +95,19 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	@Override
 	public void onResume() {
 		super.onResume();
-		Logd(TAG, "onResume: isDelayLoad:" + isDelayLoad);
+		Logd(TAG, "onResume: hasCursorChanged:" + hasCursorChanged);
 		isResume = true;
 		if (isVisible) {
-			if (isDelayLoad) {
-				isDelayLoad = false;
-				if (mMediaPresenter != null) {
-					mMediaPresenter.loadMedia(mCursor, MEDIA_TABLE[IMediaStore.MEDIA_TYPE_PHOTO]);
-				}
+			if (hasCursorChanged) {
+				hasCursorChanged = false;
+				loadPhoto();
 			}
+		}
+	}
+
+	private void loadPhoto() {
+		if (mMediaPresenter != null) {
+			mMediaPresenter.loadMedia(mCursor, MEDIA_TABLE[IMediaStore.MEDIA_TYPE_PHOTO]);
 		}
 	}
 
@@ -121,7 +123,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 		isVisible = true;
 		if (isNeedRefresh) {
 			isNeedRefresh = false;
-			mMediaPresenter.loadMedia(mCursor, MEDIA_TABLE[MEDIA_TYPE_PHOTO]);
+			loadPhoto();
 		}
 	}
 
@@ -135,7 +137,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	public void refreshFragment() {
 		Logd(TAG, "refreshFragment: isVisible" + isVisible);
 		if (isVisible) {
-			mMediaPresenter.loadMedia(mCursor, MEDIA_TABLE[MEDIA_TYPE_PHOTO]);
+			loadPhoto();
 		} else {
 			isNeedRefresh = true;
 		}
@@ -168,16 +170,14 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	@Override
 	public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
 		Logd(TAG, "onLoadFinished: cursor:" + cursor + ",mCursor:" + mCursor);
-		if (null != cursor && mCursor == cursor) {//cursor没变，无需更新数据源
+		if (null == cursor || mCursor == cursor) {//cursor没变，无需更新数据源
 			return;
 		}
 		mCursor = cursor;
 		if (isVisible && isResume) {//fragment可见才更新数据源
-			if (mMediaPresenter != null) {
-				mMediaPresenter.loadMedia(cursor, MEDIA_TABLE[IMediaStore.MEDIA_TYPE_PHOTO]);
-			}
+			loadPhoto();
 		} else {
-			isDelayLoad = true;
+			hasCursorChanged = true;
 		}
 	}
 

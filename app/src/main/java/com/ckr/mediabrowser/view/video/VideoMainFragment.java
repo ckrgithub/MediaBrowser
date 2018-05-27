@@ -33,8 +33,6 @@ import java.util.List;
 import butterknife.BindArray;
 import butterknife.BindView;
 
-import static com.ckr.mediabrowser.model.IMediaStore.MEDIA_TABLE;
-import static com.ckr.mediabrowser.model.IMediaStore.MEDIA_TYPE_VIDEO;
 import static com.ckr.mediabrowser.util.MediaLog.Logd;
 
 /**
@@ -50,13 +48,13 @@ public class VideoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	@BindArray(R.array.tab_video)
 	String[] tabTitles;
 	BaseFragment[] fragments;
-	private boolean isVisible = false;
 	private MediaPresenter mMediaPresenter;
-	private Cursor mCursor;
-	private boolean isResume;
-	private Dialog mLoadingDialog;
 	private MediaObserver mMediaObserver;
-	private boolean isDelayLoad = false;
+	private Cursor mCursor;
+	private Dialog mLoadingDialog;
+	private boolean isResume = false;
+	private boolean isVisible = false;
+	private boolean hasCursorChanged = false;
 	private boolean isNeedRefresh = false;
 
 	@Override
@@ -99,12 +97,16 @@ public class VideoMainFragment extends BaseFragment implements ViewPager.OnPageC
 		Logd(TAG, "onResume: ");
 		isResume = true;
 		if (isVisible) {
-			if (isDelayLoad) {
-				isDelayLoad = false;
-				if (mMediaPresenter != null) {
-					mMediaPresenter.loadMedia(mCursor, IMediaStore.MEDIA_TABLE[IMediaStore.MEDIA_TYPE_VIDEO]);
-				}
+			if (hasCursorChanged) {
+				hasCursorChanged = false;
+				loadVideo();
 			}
+		}
+	}
+
+	private void loadVideo() {
+		if (mMediaPresenter != null) {
+			mMediaPresenter.loadMedia(mCursor, IMediaStore.MEDIA_TABLE[IMediaStore.MEDIA_TYPE_VIDEO]);
 		}
 	}
 
@@ -120,7 +122,7 @@ public class VideoMainFragment extends BaseFragment implements ViewPager.OnPageC
 		isVisible = true;
 		if (isNeedRefresh) {
 			isNeedRefresh = false;
-			mMediaPresenter.loadMedia(mCursor, MEDIA_TABLE[MEDIA_TYPE_VIDEO]);
+			loadVideo();
 		}
 	}
 
@@ -134,7 +136,7 @@ public class VideoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	public void refreshFragment() {
 		Logd(TAG, "refreshFragment: isVisible" + isVisible + ",mMediaPresenter:" + mMediaPresenter);
 		if (isVisible) {
-			mMediaPresenter.loadMedia(mCursor, MEDIA_TABLE[MEDIA_TYPE_VIDEO]);
+			loadVideo();
 		} else {
 			isNeedRefresh = true;
 		}
@@ -167,16 +169,14 @@ public class VideoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	@Override
 	public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
 		Logd(TAG, "onLoadFinished: cursor:" + cursor + ",mCursor:" + mCursor);
-		if (mCursor == cursor) {//cursor没变，无需更新数据源
+		if (null == cursor || mCursor == cursor) {//cursor没变，无需更新数据源
 			return;
 		}
 		mCursor = cursor;
 		if (isVisible && isResume) {//fragment可见才更新数据源
-			if (mMediaPresenter != null) {
-				mMediaPresenter.loadMedia(cursor, IMediaStore.MEDIA_TABLE[IMediaStore.MEDIA_TYPE_VIDEO]);
-			}
+			loadVideo();
 		} else {
-			isDelayLoad = true;
+			hasCursorChanged = true;
 		}
 	}
 
