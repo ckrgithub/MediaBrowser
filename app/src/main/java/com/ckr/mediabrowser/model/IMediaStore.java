@@ -5,6 +5,7 @@ package com.ckr.mediabrowser.model;
  */
 
 public interface IMediaStore {
+	int MEDIA_TYPE_NONE=-1;
 	int MEDIA_TYPE_PHOTO=0;
 	int MEDIA_TYPE_AUDIO=1;
 	int MEDIA_TYPE_VIDEO=2;

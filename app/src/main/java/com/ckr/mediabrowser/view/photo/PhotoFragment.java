@@ -13,6 +13,7 @@ import com.ckr.decoration.DividerGridItemDecoration;
 import com.ckr.mediabrowser.R;
 import com.ckr.mediabrowser.adapter.GridAdapter;
 import com.ckr.mediabrowser.model.IMediaStore;
+import com.ckr.mediabrowser.model.MediaItem;
 import com.ckr.mediabrowser.model.photo.bean.Photo;
 import com.ckr.mediabrowser.observer.MediaObserver;
 import com.ckr.mediabrowser.observer.OnMediaListener;
@@ -40,7 +41,7 @@ public class PhotoFragment extends BaseFragment implements OnMediaListener<Photo
 	RecyclerView recyclerView;
 	private boolean isVisible = false;
 	private MediaObserver mMediaObserver;
-	private List<Photo> targetList;
+	private List<MediaItem> targetList;
 	private List<Photo> srcList;
 	private static final int COLUMN = 4;
 	private GridAdapter adapter;
@@ -72,7 +73,7 @@ public class PhotoFragment extends BaseFragment implements OnMediaListener<Photo
 		layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
 			@Override
 			public int getSpanSize(int position) {
-				Photo photo = targetList.get(position);
+				MediaItem photo = targetList.get(position);
 				if (photo.isLabel()) {
 					return COLUMN;
 				}
@@ -155,7 +156,7 @@ public class PhotoFragment extends BaseFragment implements OnMediaListener<Photo
 				} else {
 					Loge(TAG, "handleData: 未添加日期:" + dateTaken);
 					hashMap.put(dateTaken, i);
-					Photo label = new Photo();
+					MediaItem label = new Photo();
 					label.setLabel(true);
 					label.setLabelText(dateTaken);
 					targetList.add(targetList.size(), label);
