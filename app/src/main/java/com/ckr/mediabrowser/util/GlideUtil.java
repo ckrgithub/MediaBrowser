@@ -32,7 +32,7 @@ public class GlideUtil {
 		}
 		RequestOptions options = new RequestOptions()
 				.centerCrop()
-				.diskCacheStrategy(DiskCacheStrategy.DATA)
+				.diskCacheStrategy(DiskCacheStrategy.RESOURCE)
 //				.dontAnimate()
 				.placeholder(R.mipmap.ic_default_photo)
 				.error(R.mipmap.ic_default_photo);
