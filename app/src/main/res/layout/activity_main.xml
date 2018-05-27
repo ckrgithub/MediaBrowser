@@ -7,26 +7,18 @@
     android:layout_height="match_parent"
     tools:context="com.ckr.mediabrowser.view.MainActivity">
 
-
     <com.ckr.mediabrowser.widget.MyViewPager
         android:id="@+id/viewPager"
-        android:layout_marginBottom="?android:attr/actionBarSize"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </com.ckr.mediabrowser.widget.MyViewPager>
-    <!--<include-->
-        <!--layout="@layout/viewpager"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_marginBottom="?android:attr/actionBarSize"/>-->
+        android:layout_height="match_parent"
+        android:layout_marginBottom="?android:attr/actionBarSize"/>
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@drawable/bg_tablayout"
         android:layout_gravity="bottom"
+        android:background="@drawable/bg_tablayout_overline"
         app:tabGravity="fill"
         app:tabIndicatorHeight="0dp"
         app:tabMode="fixed"

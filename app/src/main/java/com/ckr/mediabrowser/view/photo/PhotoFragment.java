@@ -69,6 +69,8 @@ public class PhotoFragment extends BaseFragment implements OnMediaListener<Photo
 	}
 
 	private void initView() {
+		int dimension = (int) getContext().getResources().getDimension(R.dimen.divider_grid);
+		recyclerView.setPadding(dimension, 0, 0, 0);
 		GridLayoutManager layoutManager = new GridLayoutManager(getContext(), COLUMN);
 		layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
 			@Override

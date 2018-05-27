@@ -7,19 +7,10 @@
     <!-- TODO: Update blank fragment layout -->
     <include layout="@layout/tablayout"/>
 
-
     <com.ckr.mediabrowser.widget.MyViewPager
         android:id="@+id/myViewPager"
         android:layout_marginTop="@dimen/tabLayout_height"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-    </com.ckr.mediabrowser.widget.MyViewPager>
-    <!--<include-->
-        <!--layout="@layout/viewpager"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_marginTop="@dimen/tabLayout_height"-->
-        <!--/>-->
+        android:layout_height="match_parent"/>
 
 </FrameLayout>

@@ -70,7 +70,9 @@ public class AudioFragment extends BaseFragment implements OnMediaListener<Audio
 	private void initView() {
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 		DividerLinearItemDecoration.Builder builder = new DividerLinearItemDecoration.Builder(getContext());
-		builder.setDivider(R.drawable.bg_divider_linear);
+		builder.setDivider(R.drawable.bg_divider_linear)
+				.removeFooterDivider(true)
+				.removeHeaderDivider(true);
 		recyclerView.addItemDecoration(builder.build());
 		adapter = new GridAdapter(this, COLUMN);
 		recyclerView.setAdapter(adapter);

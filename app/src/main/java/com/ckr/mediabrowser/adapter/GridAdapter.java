@@ -61,7 +61,7 @@ public class GridAdapter extends BaseAdapter<MediaItem, GridAdapter.MediaItemHol
 	protected int getLayoutId(int viewType) {
 		if (viewType == MEDIA_TYPE_NONE) {
 			return R.layout.item_label;
-		}else if (viewType == MEDIA_TYPE_PHOTO) {
+		} else if (viewType == MEDIA_TYPE_PHOTO) {
 			return R.layout.item_grid;
 		}
 		return R.layout.item_grid_2;
@@ -77,15 +77,15 @@ public class GridAdapter extends BaseAdapter<MediaItem, GridAdapter.MediaItemHol
 		int itemViewType = getItemViewType(position);
 		if (itemViewType == MEDIA_TYPE_NONE) {
 			int mediaType = mediaItem.getMediaType();
-			if (mediaType!=MEDIA_TYPE_PHOTO) {
-				holder.labelView.setBackgroundColor(ContextCompat.getColor(mContext,R.color.bg_label));
+			if (mediaType != MEDIA_TYPE_PHOTO) {
+				holder.labelView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.bg_label));
 			}
 			holder.labelView.setText(mediaItem.getLabelText());
 		} else if (itemViewType == MEDIA_TYPE_PHOTO) {
 			String path = mediaItem.getPath();
 			Logd(TAG, "convert: path:" + path);
 			GlideUtil.loadImageByPath(context, holder.imageView, path);
-		}else {
+		} else {
 			String path = mediaItem.getPath();
 			Logd(TAG, "convert: path:" + path);
 			GlideUtil.loadImageByPath(context, holder.imageView, path);
@@ -135,7 +135,7 @@ public class GridAdapter extends BaseAdapter<MediaItem, GridAdapter.MediaItemHol
 				ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
 				layoutParams.height = imageHeight;
 				imageView.setLayoutParams(layoutParams);
-			}else {
+			} else {
 				imageView = itemView.findViewById(R.id.imageView);
 				ViewGroup.LayoutParams layoutParams = imageView.getLayoutParams();
 				layoutParams.height = imageHeight;

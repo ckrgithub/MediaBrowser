@@ -8,6 +8,7 @@
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/tabLayout_height"
+        android:background="@drawable/bg_tablayout_underline"
         app:tabGravity="center"
         app:tabIndicatorColor="@color/colorAccent"
         app:tabIndicatorHeight="1.3dp"
