@@ -66,13 +66,14 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
 
 	@Override
 	public void onPageSelected(int position) {
-		Loge(TAG, "onPageSelected: position:" + position);
+		BaseFragment fragment = fragments[position];
+		Loge(TAG, "onPageSelected: position:" + position + ",fragment:" + fragment);
 		fragments[position].refreshFragment();
 	}
 
 	@Override
 	public void onPageScrollStateChanged(int state) {
-
+		Logd(TAG, "onPageScrollStateChanged: state:" + state);
 	}
 
 	@Override

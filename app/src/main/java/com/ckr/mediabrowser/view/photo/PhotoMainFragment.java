@@ -57,6 +57,7 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	private Dialog mLoadingDialog;
 	private MediaObserver mMediaObserver;
 	private boolean isDelayLoad = false;
+	private boolean isNeedRefresh = false;
 
 	@Override
 	protected int getLayoutId() {
@@ -73,8 +74,8 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 			if (PermissionRequest.requestPermission(this, PermissionRequest.PERMISSION_STORAGE, PermissionRequest.REQUEST_STORAGE)) {
 				onPermissionGranted(PermissionRequest.REQUEST_STORAGE);
 			}
-		}else {
-			if (PermissionRequest.hasPermissionGranted(getContext(),PermissionRequest.PERMISSION_STORAGE)) {
+		} else {
+			if (PermissionRequest.hasPermissionGranted(getContext(), PermissionRequest.PERMISSION_STORAGE)) {
 				onPermissionGranted(PermissionRequest.REQUEST_STORAGE);
 			}
 		}
@@ -118,6 +119,10 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 	protected void onVisible() {
 		Logd(TAG, "onVisible: " + isVisible);
 		isVisible = true;
+		if (isNeedRefresh) {
+			isNeedRefresh = false;
+			mMediaPresenter.loadMedia(mCursor, MEDIA_TABLE[MEDIA_TYPE_PHOTO]);
+		}
 	}
 
 	@Override
@@ -131,6 +136,8 @@ public class PhotoMainFragment extends BaseFragment implements ViewPager.OnPageC
 		Logd(TAG, "refreshFragment: isVisible" + isVisible);
 		if (isVisible) {
 			mMediaPresenter.loadMedia(mCursor, MEDIA_TABLE[MEDIA_TYPE_PHOTO]);
+		} else {
+			isNeedRefresh = true;
 		}
 	}
 

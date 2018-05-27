@@ -57,6 +57,7 @@ public class AudioMainFragment extends BaseFragment implements ViewPager.OnPageC
 	private Dialog mLoadingDialog;
 	private MediaObserver mMediaObserver;
 	private boolean isDelayLoad = false;
+	private boolean isNeedRefresh=false;
 
 	@Override
 	protected int getLayoutId() {
@@ -118,6 +119,10 @@ public class AudioMainFragment extends BaseFragment implements ViewPager.OnPageC
 	protected void onVisible() {
 		Logd(TAG, "onVisible: " + isVisible);
 		isVisible = true;
+		if (isNeedRefresh) {
+			isNeedRefresh=false;
+			mMediaPresenter.loadMedia(mCursor, MEDIA_TABLE[MEDIA_TYPE_AUDIO]);
+		}
 	}
 
 	@Override
@@ -128,9 +133,11 @@ public class AudioMainFragment extends BaseFragment implements ViewPager.OnPageC
 
 	@Override
 	public void refreshFragment() {
-		Logd(TAG, "refreshFragment: isVisible" + isVisible+",mMediaPresenter:"+mMediaPresenter);
+		Logd(TAG, "refreshFragment: isVisible:" + isVisible+",mMediaPresenter:"+mMediaPresenter);
 		if (isVisible) {
 			mMediaPresenter.loadMedia(mCursor, MEDIA_TABLE[MEDIA_TYPE_AUDIO]);
+		}else {
+			isNeedRefresh=true;
 		}
 	}
 
