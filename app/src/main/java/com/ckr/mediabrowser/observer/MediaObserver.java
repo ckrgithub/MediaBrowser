@@ -1,7 +1,7 @@
 package com.ckr.mediabrowser.observer;
 
 import com.ckr.mediabrowser.model.MediaItem;
-import com.ckr.mediabrowser.model.file.File;
+import com.ckr.mediabrowser.model.file.Document;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -59,7 +59,7 @@ public class MediaObserver {
 		}
 	}
 
-	public void subscribeOnFile(Map<String, List<File>> map, int mediaType) {
+	public void subscribeOnFile(Map<String, List<Document>> map, int mediaType) {
 		Iterator<OnMediaListener> iterator = mListeners.iterator();
 		while (iterator.hasNext()) {
 			OnMediaListener listener = iterator.next();
